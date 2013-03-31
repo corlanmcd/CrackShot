@@ -44,6 +44,7 @@ public class AboutActivity extends Activity implements OnClickListener
 		Intent mainMenuIntent = new Intent(this, MainMenuActivity.class);
 		startActivity(mainMenuIntent);
 		finish();
+		//Testing
 	}
 
 }
