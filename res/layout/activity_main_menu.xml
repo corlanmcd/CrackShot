@@ -1,0 +1,34 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainMenuActivity" >
+
+    <Button
+        android:id="@+id/MainMenuActivity_startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="150dp"
+        android:text="@string/startMainActivityButtonText" />
+
+    <Button
+        android:id="@+id/MainMenuActivity_optionsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/MainMenuActivity_startButton"
+        android:layout_alignTop="@+id/MainMenuActivity_startButton"
+        android:layout_marginTop="65dp"
+        android:text="@string/optionsMainActivityButtonText" />
+
+    <Button
+        android:id="@+id/MainMenuActivity_aboutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/MainMenuActivity_optionsButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
+        android:text="@string/aboutMainActivityButtonText" />
+
+</RelativeLayout>
