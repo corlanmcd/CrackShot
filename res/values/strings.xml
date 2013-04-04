@@ -9,5 +9,15 @@
     <string name="title_activity_about">AboutActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="backAboutActivityButtonText">Back</string>
+    <string name="title_activity_options">OptionsActivity</string>
+    <string name="OptionsActivity_backButtonText">Back</string>
+    <string name="OptionsActivity_measurementSystemText">Measurement System:</string>
+    <string name="OptionsActivity_reticleColorText">Reticle Color:</string>
+    <string name="OptionsActivity_targetBoxColorText">Targetting Box Color:</string>
+    <string name="OptionsActivity_metersText">meters</string>
+    <string name="OptionsActivity_yardsText">yards</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="CalibrationDialogFragment_Header">Zeroing Process</string>
+    <string name="CalibrationDialogFragment_OK">OK</string>
 
 </resources>

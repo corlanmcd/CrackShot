@@ -13,8 +13,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name="cm.crackshot.MainMenuActivity"
+        <activity 
+            android:name="cm.crackshot.activites.MainMenuActivity"
+            android:screenOrientation="nosensor"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,8 +25,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="cm.crackshot.AboutActivity"
+            android:name="cm.crackshot.activites.AboutActivity"
+            android:screenOrientation="nosensor"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_about" >
+        </activity>
+        <activity
+            android:name="cm.crackshot.activites.OptionsActivity"
+            android:screenOrientation="nosensor"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_options" >
+        </activity>
+        <activity
+            android:name="cm.crackshot.activites.StartActivity"
+            android:screenOrientation="nosensor"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_start" >
         </activity>
     </application>
 
