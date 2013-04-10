@@ -5,22 +5,21 @@ import java.util.TimerTask;
 
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 public class SensorAngles 
 {
-	private boolean hasGyroscope 	= false;
+	private boolean hasGyroscope;
 	private boolean initState 		= true;
 	
-	private static final int TIME_CONSTANT = 30;
-	
-	private static final float a = 0.2f;						// value used in low pass filter
-	private static final float EPSILON = 0.000000001f;			// offset used in low pass filter
+	private static final float a 					= 0.02f;						// value used in low pass filter
+	private static final float EPSILON 				= 0.000000001f;				// offset used in low pass filter
 	private static final float FILTER_COEFFICIENT = 0.98f;
-	private static final float NS2S = 1.0f / 1000000000.0f;		//NS2S converts nanoseconds to seconds
+	private static final float NS2S 				= 1.0f / 1000000000.0f;		//NS2S converts nanoseconds to seconds
 
 	private float timestamp;
 	
-	private float[] accelValuesFromHardware;
+	//private float[] accelValuesFromHardware = new float[3];
 	private float[] accelLowPassValues 		= new float[3];
 	private float[] finalRotationMatrix    	= new float[9];
     private float[] fusedOrientation 		= new float[3];		// final orientation angles from sensor fusion
@@ -30,19 +29,17 @@ public class SensorAngles
 	private float[] magFieldValues 			= new float[3];
 	private float[] orientationValues 		= new float[3];
 	private float[] temporaryRotationMatrix = new float[9];
-	
-	private Timer fuseTimer = new Timer();
-	
-	public SensorAngles()
+		
+	public SensorAngles(boolean hasGyroscope)
 	{
-		fuseTimer.scheduleAtFixedRate(new calculateFusedOrientationTask(), 1000, TIME_CONSTANT);
+		this.hasGyroscope = hasGyroscope;
 	}
 	
 	public void calculateAccelMagneticOrientation(SensorEvent event) 
 	{
-		accelValuesFromHardware = getLowPassValues(event.values.clone(), accelLowPassValues);
+		accelLowPassValues = getLowPassValues(event.values.clone(), accelLowPassValues);
 		
-		if(SensorManager.getRotationMatrix(temporaryRotationMatrix, null, accelValuesFromHardware,
+		if(SensorManager.getRotationMatrix(temporaryRotationMatrix, null, accelLowPassValues,
 				magFieldValues)) 
 		{
 	    	SensorManager.remapCoordinateSystem(temporaryRotationMatrix, 
@@ -56,12 +53,19 @@ public class SensorAngles
     {
     	if (hasGyroscope)
     	{
-    		return fusedOrientation[1];
+    		Log.e("Pitch Angle: ", Float.toString((float)Math.toDegrees(fusedOrientation[1])));
+    		return (float) Math.toDegrees(fusedOrientation[1]);
     	}
     	else
     	{
-    		return accelValuesFromHardware[0];
+    		return orientationValues[1];
     	}
+    }
+    
+    public float getRollAngle()
+    {
+    	Log.e("Roll Angle: ", Float.toString((float)Math.toDegrees(orientationValues[2])));
+    	return (float) Math.toDegrees(orientationValues[2]);
     }
 	
 	// simple low-pass filter
@@ -75,21 +79,6 @@ public class SensorAngles
 		}
 
 		return newValues;
-	}
-	
-	private float getCameraAngleFromRotationMatrix() 
-	{
-		if(SensorManager.getRotationMatrix(temporaryRotationMatrix, null, 
-				accelValuesFromHardware, magFieldValues)) 
-		{
-		
-			SensorManager.remapCoordinateSystem(temporaryRotationMatrix, 
-					SensorManager.AXIS_X, SensorManager.AXIS_Z, finalRotationMatrix);
-		
-			SensorManager.getOrientation(finalRotationMatrix, orientationValues);
-		}
-		
-		return orientationValues[1];
 	}
 	
 	//------------------------- Sensor Fusion Code from Thousand Thoughts Blog
@@ -222,7 +211,7 @@ public class SensorAngles
         return result;
     }
 	
-    class calculateFusedOrientationTask extends TimerTask 
+    public class calculateFusedOrientationTask extends TimerTask 
     {
         public void run() 
         {
@@ -297,4 +286,9 @@ public class SensorAngles
             fusedOrientation = gyroOrientation.clone();
         }
     }
+    
+	public void setMagneticField(SensorEvent event)
+	{
+		magFieldValues = event.values.clone();
+	}
 }

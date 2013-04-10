@@ -1,7 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/FrameLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".StartActivity" >
 
-</RelativeLayout>
+    <FrameLayout
+        android:id="@+id/camera_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+    </FrameLayout>
+
+    <cm.crackshot.views.CrosshairView
+        android:id="@+id/crosshairView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="167dp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/gyroangle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gyroAngle" />
+
+</FrameLayout>

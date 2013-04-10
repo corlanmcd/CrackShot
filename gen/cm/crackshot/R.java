@@ -17,7 +17,16 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int exampleColor=0x7f010002;
+        public static final int exampleColor=0x7f010006;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int exampleColor1=0x7f010002;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -27,13 +36,29 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int exampleDimension=0x7f010001;
+        public static final int exampleDimension=0x7f010005;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int exampleDimension1=0x7f010001;
         /** <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
 <p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
          */
-        public static final int exampleDrawable=0x7f010003;
+        public static final int exampleDrawable=0x7f010007;
+        /** <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+<p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+         */
+        public static final int exampleDrawable1=0x7f010003;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -41,19 +66,31 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int exampleString=0x7f010000;
+        public static final int exampleString=0x7f010004;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int exampleString1=0x7f010000;
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
         public static final int AboutActivity_backButton=0x7f070000;
+        public static final int FrameLayout1=0x7f070011;
         public static final int MainMenuActivity_aboutButton=0x7f070003;
         public static final int MainMenuActivity_optionsButton=0x7f070002;
         public static final int MainMenuActivity_startButton=0x7f070001;
         public static final int OptionsActivity_backButton=0x7f070010;
         public static final int TableLayout1=0x7f070004;
-        public static final int menu_settings=0x7f070011;
+        public static final int camera_layout=0x7f070012;
+        public static final int crosshairView=0x7f070013;
+        public static final int gyroangle=0x7f070014;
+        public static final int menu_settings=0x7f070015;
         public static final int radioButton1=0x7f070007;
         public static final int radioButton2=0x7f070008;
         public static final int spinner1=0x7f07000b;
@@ -71,7 +108,8 @@ containing a value of this type.
         public static final int activity_main_menu=0x7f030001;
         public static final int activity_options=0x7f030002;
         public static final int activity_start=0x7f030003;
-        public static final int sample_crosshair_view=0x7f030004;
+        public static final int view_camera_scope=0x7f030004;
+        public static final int view_crosshair=0x7f030005;
     }
     public static final class menu {
         public static final int activity_about=0x7f060000;
@@ -80,8 +118,10 @@ containing a value of this type.
         public static final int activity_start=0x7f060003;
     }
     public static final class string {
+        public static final int CalibrationDialogFragment_Configure=0x7f040011;
+        public static final int CalibrationDialogFragment_Default=0x7f040013;
         public static final int CalibrationDialogFragment_Header=0x7f040010;
-        public static final int CalibrationDialogFragment_OK=0x7f040011;
+        public static final int CalibrationDialogFragment_Message=0x7f040012;
         public static final int OptionsActivity_backButtonText=0x7f040009;
         public static final int OptionsActivity_measurementSystemText=0x7f04000a;
         public static final int OptionsActivity_metersText=0x7f04000d;
@@ -91,6 +131,7 @@ containing a value of this type.
         public static final int aboutMainActivityButtonText=0x7f040004;
         public static final int app_name=0x7f040000;
         public static final int backAboutActivityButtonText=0x7f040007;
+        public static final int gyroAngle=0x7f040014;
         public static final int hello_world=0x7f040006;
         public static final int menu_settings=0x7f040001;
         public static final int optionsMainActivityButtonText=0x7f040003;
@@ -128,6 +169,82 @@ containing a value of this type.
         public static final int AppTheme=0x7f050001;
     }
     public static final class styleable {
+        /** Attributes that can be used with a CameraScopeView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #CameraScopeView_exampleColor1 cm.crackshot:exampleColor1}</code></td><td></td></tr>
+           <tr><td><code>{@link #CameraScopeView_exampleDimension1 cm.crackshot:exampleDimension1}</code></td><td></td></tr>
+           <tr><td><code>{@link #CameraScopeView_exampleDrawable1 cm.crackshot:exampleDrawable1}</code></td><td></td></tr>
+           <tr><td><code>{@link #CameraScopeView_exampleString1 cm.crackshot:exampleString1}</code></td><td></td></tr>
+           </table>
+           @see #CameraScopeView_exampleColor1
+           @see #CameraScopeView_exampleDimension1
+           @see #CameraScopeView_exampleDrawable1
+           @see #CameraScopeView_exampleString1
+         */
+        public static final int[] CameraScopeView = {
+            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003
+        };
+        /**
+          <p>This symbol is the offset where the {@link cm.crackshot.R.attr#exampleColor1}
+          attribute's value can be found in the {@link #CameraScopeView} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:exampleColor1
+        */
+        public static final int CameraScopeView_exampleColor1 = 2;
+        /**
+          <p>This symbol is the offset where the {@link cm.crackshot.R.attr#exampleDimension1}
+          attribute's value can be found in the {@link #CameraScopeView} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:exampleDimension1
+        */
+        public static final int CameraScopeView_exampleDimension1 = 1;
+        /**
+          <p>This symbol is the offset where the {@link cm.crackshot.R.attr#exampleDrawable1}
+          attribute's value can be found in the {@link #CameraScopeView} array.
+
+
+          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+<p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+          @attr name android:exampleDrawable1
+        */
+        public static final int CameraScopeView_exampleDrawable1 = 3;
+        /**
+          <p>This symbol is the offset where the {@link cm.crackshot.R.attr#exampleString1}
+          attribute's value can be found in the {@link #CameraScopeView} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:exampleString1
+        */
+        public static final int CameraScopeView_exampleString1 = 0;
         /** Attributes that can be used with a CrosshairView.
            <p>Includes the following attributes:</p>
            <table>
@@ -145,7 +262,7 @@ containing a value of this type.
            @see #CrosshairView_exampleString
          */
         public static final int[] CrosshairView = {
-            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003
+            0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007
         };
         /**
           <p>This symbol is the offset where the {@link cm.crackshot.R.attr#exampleColor}

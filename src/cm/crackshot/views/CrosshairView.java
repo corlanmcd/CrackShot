@@ -1,21 +1,22 @@
 package cm.crackshot.views;
 
-import cm.crackshot.R;
-import cm.crackshot.R.styleable;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
+import cm.crackshot.R;
 
 /**
  * TODO: document your custom view class.
  */
-public class CrosshairView extends View {
+public class CrosshairView extends View 
+{
 	private String mExampleString; // TODO: use a default from R.string...
 	private int mExampleColor = Color.RED; // TODO: use a default from
 											// R.color...
@@ -25,6 +26,9 @@ public class CrosshairView extends View {
 	private TextPaint mTextPaint;
 	private float mTextWidth;
 	private float mTextHeight;
+	
+	private Paint paint;
+	private Point centerPoint;
 
 	public CrosshairView(Context context) {
 		super(context);
@@ -43,6 +47,10 @@ public class CrosshairView extends View {
 
 	private void init(AttributeSet attrs, int defStyle) {
 		// Load attributes
+		
+		paint = new Paint();
+		
+		
 		final TypedArray a = getContext().obtainStyledAttributes(attrs,
 				R.styleable.CrosshairView, defStyle, 0);
 
@@ -69,7 +77,7 @@ public class CrosshairView extends View {
 		mTextPaint.setTextAlign(Paint.Align.LEFT);
 
 		// Update TextPaint and text measurements from attributes
-		invalidateTextPaintAndMeasurements();
+		//invalidateTextPaintAndMeasurements();
 	}
 
 	private void invalidateTextPaintAndMeasurements() {
@@ -85,7 +93,12 @@ public class CrosshairView extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		drawHUD();
+
+		paint.setStrokeWidth(8.0f);
+		paint.setStyle(Paint.Style.STROKE); 
+		paint.setColor(android.graphics.Color.BLUE);
+		
+		drawHUD(canvas);
 		
 		/*// TODO: consider storing these as member variables to reduce
 		// allocations per draw cycle.
@@ -110,9 +123,14 @@ public class CrosshairView extends View {
 		}*/
 	}
 	
-	private void drawHUD()
+	private void drawHUD(Canvas canvas)
 	{
+		drawVerticalLine(canvas);
+	}
 
+	private void drawVerticalLine(Canvas canvas) 
+	{
+		canvas.drawLine(centerPoint.x, 0, centerPoint.x, 2 * centerPoint.y, paint);
 	}
 
 	/**
@@ -196,5 +214,10 @@ public class CrosshairView extends View {
 	 */
 	public void setExampleDrawable(Drawable exampleDrawable) {
 		mExampleDrawable = exampleDrawable;
+	}
+
+	public void setCenterPoint(Point centerPoint)
+	{
+		this.centerPoint = centerPoint;		
 	}
 }

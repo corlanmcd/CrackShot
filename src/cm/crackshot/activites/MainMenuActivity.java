@@ -3,7 +3,7 @@ package cm.crackshot.activites;
 import cm.crackshot.R;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -12,14 +12,43 @@ import android.widget.Button;
 
 public class MainMenuActivity extends Activity implements OnClickListener
 {
+	boolean firstTimeRunningApp = true;
+	boolean hasCamera = false;
+	boolean hasGyroscope = false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
 		registerViewListeners();
+		checkIfFirstTime();
+		checkCameraGyroscopeAvailabililty();
+		checkCameraAvailability();
+	}
+
+	private void checkCameraGyroscopeAvailabililty() 
+	{
+		checkCameraAvailability();
+		checkGyroscopeAvailability();
+	}
+
+	private void checkCameraAvailability() 
+	{
+		PackageManager pm = getPackageManager();
+		hasCamera = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+	}
+	
+	private void checkGyroscopeAvailability() 
+	{
+		PackageManager pm = getPackageManager();
+		hasGyroscope = pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_GYROSCOPE);
+	}
+
+	private void checkIfFirstTime() 
+	{
+		// TODO Check is first time running the app
 	}
 
 	private void registerViewListeners() 
@@ -56,6 +85,11 @@ public class MainMenuActivity extends Activity implements OnClickListener
 	private void startScopeActvityFromIntent() 
 	{
 		Intent scopeIntent = new Intent(this, StartActivity.class);
+		
+		scopeIntent.putExtra("firstTimeRunningApp", firstTimeRunningApp);
+		scopeIntent.putExtra("hasCamera", hasCamera);
+		scopeIntent.putExtra("hasGyroscope", hasGyroscope);
+		
 		startActivity(scopeIntent);
 	}
 	

@@ -13,11 +13,14 @@
     <string name="OptionsActivity_backButtonText">Back</string>
     <string name="OptionsActivity_measurementSystemText">Measurement System:</string>
     <string name="OptionsActivity_reticleColorText">Reticle Color:</string>
-    <string name="OptionsActivity_targetBoxColorText">Targetting Box Color:</string>
+    <string name="OptionsActivity_targetBoxColorText">Targeting Box Color:</string>
     <string name="OptionsActivity_metersText">meters</string>
     <string name="OptionsActivity_yardsText">yards</string>
     <string name="title_activity_start">StartActivity</string>
     <string name="CalibrationDialogFragment_Header">Zeroing Process</string>
-    <string name="CalibrationDialogFragment_OK">OK</string>
+    <string name="CalibrationDialogFragment_Configure">Configure</string>
+    <string name="CalibrationDialogFragment_Message">Here you will &quot;zero-in&quot; your scope reticle. To do so, please tap the area of the screen you\'d like your sight to be center at. If you\'d prefer the default option, which is the center of your device\'s screen, please press the &quot;Default&quot; button.</string>
+    <string name="CalibrationDialogFragment_Default">Default</string>
+    <string name="gyroAngle">0</string>
 
 </resources>
