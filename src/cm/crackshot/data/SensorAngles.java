@@ -1,6 +1,5 @@
 package cm.crackshot.data;
 
-import java.util.Timer;
 import java.util.TimerTask;
 
 import android.hardware.SensorEvent;
@@ -53,7 +52,7 @@ public class SensorAngles
     {
     	if (hasGyroscope)
     	{
-    		Log.e("Pitch Angle: ", Float.toString((float)Math.toDegrees(fusedOrientation[1])));
+    		//Log.e("Pitch Angle: ", Float.toString((float)Math.toDegrees(fusedOrientation[1])));
     		return (float) Math.toDegrees(fusedOrientation[1]);
     	}
     	else
@@ -64,7 +63,7 @@ public class SensorAngles
     
     public float getRollAngle()
     {
-    	Log.e("Roll Angle: ", Float.toString((float)Math.toDegrees(orientationValues[2])));
+    	//Log.e("Roll Angle: ", Float.toString((float)Math.toDegrees(orientationValues[2])));
     	return (float) Math.toDegrees(orientationValues[2]);
     }
 	

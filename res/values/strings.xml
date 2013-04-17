@@ -22,5 +22,6 @@
     <string name="CalibrationDialogFragment_Message">Here you will &quot;zero-in&quot; your scope reticle. To do so, please tap the area of the screen you\'d like your sight to be center at. If you\'d prefer the default option, which is the center of your device\'s screen, please press the &quot;Default&quot; button.</string>
     <string name="CalibrationDialogFragment_Default">Default</string>
     <string name="gyroAngle">0</string>
+    <string name="StartActivity_selectedRange">25</string>
 
 </resources>

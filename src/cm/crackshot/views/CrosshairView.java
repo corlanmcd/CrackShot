@@ -30,22 +30,26 @@ public class CrosshairView extends View
 	private Paint paint;
 	private Point centerPoint;
 
-	public CrosshairView(Context context) {
+	public CrosshairView(Context context)
+	{
 		super(context);
 		init(null, 0);
 	}
 
-	public CrosshairView(Context context, AttributeSet attrs) {
+	public CrosshairView(Context context, AttributeSet attrs) 
+	{
 		super(context, attrs);
 		init(attrs, 0);
 	}
 
-	public CrosshairView(Context context, AttributeSet attrs, int defStyle) {
+	public CrosshairView(Context context, AttributeSet attrs, int defStyle) 
+	{
 		super(context, attrs, defStyle);
 		init(attrs, defStyle);
 	}
 
-	private void init(AttributeSet attrs, int defStyle) {
+	private void init(AttributeSet attrs, int defStyle) 
+	{
 		// Load attributes
 		
 		paint = new Paint();
@@ -80,7 +84,8 @@ public class CrosshairView extends View
 		//invalidateTextPaintAndMeasurements();
 	}
 
-	private void invalidateTextPaintAndMeasurements() {
+	private void invalidateTextPaintAndMeasurements() 
+	{
 		mTextPaint.setTextSize(mExampleDimension);
 		mTextPaint.setColor(mExampleColor);
 		mTextWidth = mTextPaint.measureText(mExampleString);
@@ -90,13 +95,11 @@ public class CrosshairView extends View
 	}
 
 	@Override
-	protected void onDraw(Canvas canvas) {
+	protected void onDraw(Canvas canvas)
+	{
 		super.onDraw(canvas);
 
-
-		paint.setStrokeWidth(8.0f);
-		paint.setStyle(Paint.Style.STROKE); 
-		paint.setColor(android.graphics.Color.BLUE);
+		setupPaintBrush();
 		
 		drawHUD(canvas);
 		
@@ -123,14 +126,51 @@ public class CrosshairView extends View
 		}*/
 	}
 	
+	private void setupPaintBrush() 
+	{
+		paint.setStrokeWidth(6.0f);
+		paint.setStyle(Paint.Style.STROKE); 
+		paint.setColor(android.graphics.Color.RED);
+	}
+
 	private void drawHUD(Canvas canvas)
 	{
 		drawVerticalLine(canvas);
+		drawHorizontalLines(canvas);
+		drawTargetingBox(canvas);
+	}
+
+	private void drawTargetingBox(Canvas canvas) 
+	{
+		canvas.drawRect(centerPoint.x - 100, getHeight()/2 - 100,
+				centerPoint.x + 100, getHeight()/2 + 100, paint);
 	}
 
 	private void drawVerticalLine(Canvas canvas) 
 	{
 		canvas.drawLine(centerPoint.x, 0, centerPoint.x, 2 * centerPoint.y, paint);
+	}
+	
+	private void drawHorizontalLines(Canvas canvas) 
+	{
+		int count = 1;
+		int verticalSpacing = (int) (getHeight() * .18);
+		
+		while (count <= 5)
+		{
+			if (count == 1)
+			{
+				canvas.drawLine((float)(centerPoint.x - (getWidth() * .2)), verticalSpacing * count,
+						(float)(centerPoint.x + (getWidth() * .2)), verticalSpacing*count, paint);
+			}
+			else
+			{
+				canvas.drawLine((float)(centerPoint.x - (getWidth() * .1)), verticalSpacing * count,
+						(float)(centerPoint.x + (getWidth() * .1)), verticalSpacing*count, paint);
+			}
+			
+			count++;
+		}
 	}
 
 	/**
