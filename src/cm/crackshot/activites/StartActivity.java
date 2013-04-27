@@ -56,7 +56,9 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 	private TextView angleView;
 	private TextView selectedRangeView;
 	
-	private View crosshair;
+	//private CrosshairView crosshairView;
+	
+	private CrosshairView crosshairView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,7 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 		angleView = (TextView)findViewById(R.id.gyroangle);
 		selectedRangeView = (TextView)findViewById(R.id.selectedRange);
 		
-		crosshair = (View)findViewById(R.id.crosshairView);
+		crosshairView = (CrosshairView)findViewById(R.id.crosshairView);
 				
 		initializationProcess();
 
@@ -89,6 +91,11 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 			//TODO
 			retrieveCenterPointFromHistory();
 		}		
+	}
+	
+	public int getRange()
+	{
+		return Integer.valueOf((String) selectedRangeView.getText());
 	}
 
 	private void initializationProcess() 
@@ -128,7 +135,6 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 
 	private void enableCameraFocusFeature() 
 	{
-		// TODO Implement use of focus get Camera parameters
 		Camera.Parameters params = mCamera.getParameters();
 
 		List<String> focusModes = params.getSupportedFocusModes();
@@ -200,30 +206,6 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
                 	switch (selectedRange)
                     {
                     	case 25:
-                    		selectedRange = 50;
-                    		break;
-                    	case 50:
-                    		selectedRange = 75;
-                    		break;
-                    	case 75:
-                    		selectedRange = 100;
-                    		break;
-                    	case 100:
-                    		selectedRange = 125;
-                    		break;
-                    	case 125:
-                    		break;
-                    }
-                    updateSelectedRangeTextAndTargeting();
-                }
-                return true;
-                
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                if (action == KeyEvent.ACTION_DOWN) 
-                {
-                	switch (selectedRange)
-                    {
-                    	case 25:
                     		break;
                     	case 50:
                     		selectedRange = 25;
@@ -236,6 +218,30 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
                     		break;
                     	case 125:
                     		selectedRange = 100;
+                    		break;
+                    }
+                    updateSelectedRangeTextAndTargeting();
+                }
+                return true;
+                
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (action == KeyEvent.ACTION_DOWN) 
+                {
+                	switch (selectedRange)
+                    {
+                    	case 25:
+                    		selectedRange = 50;
+                    		break;
+                    	case 50:
+                    		selectedRange = 75;
+                    		break;
+                    	case 75:
+                    		selectedRange = 100;
+                    		break;
+                    	case 100:
+                    		selectedRange = 125;
+                    		break;
+                    	case 125:
                     		break;
                     }
                     updateSelectedRangeTextAndTargeting();
@@ -255,7 +261,6 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 
 	private void updateTargeting() 
 	{
-		
 	}
 
 	private void releaseCamera()
@@ -297,8 +302,8 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 
 	private void drawCrosshair() 
 	{
-		CrosshairView crosshairView = (CrosshairView) findViewById(R.id.crosshairView);
 		crosshairView.setCenterPoint(centerPoint);
+		crosshairView.setSelectedRange(getRange());
 		crosshairView.setRotation(sensorAngles.getPitchAngle());
 		crosshairView.setVisibility(View.VISIBLE);
 	}
@@ -310,8 +315,9 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 
 	private void askUserCenterPointOption() 
 	{
-		DialogFragment newFragment = new CalibrationDialogFragment();
-		newFragment.show(getSupportFragmentManager(), "calibration");
+		DialogFragment calibrationOptionDialog = new CalibrationDialogFragment();
+		calibrationOptionDialog.setCancelable(false);
+		calibrationOptionDialog.show(getSupportFragmentManager(), "calibration");
 	}
 
 	@Override
@@ -328,8 +334,6 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 
 	@Override
 	public void onAccuracyChanged(Sensor arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -377,7 +381,9 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 	private void updateCrosshairAngle()
 	{
 		angleView.setText(Float.toString(sensorAngles.getPitchAngle()));
-		crosshair.setRotation(-(int)sensorAngles.getRollAngle());
+		crosshairView.setSelectedRange(getRange());
+		crosshairView.invalidate();
+		crosshairView.setRotation(-(int)sensorAngles.getRollAngle());
 	}
 	
 	@Override
@@ -390,10 +396,8 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 		}
 		if (id == -2) // Dialog "Negative" Button Selected - "Default"
 		{
-			// TODO Auto-generated method stub
 			Log.e("CALLBACK", "Default Callback Works");
 			setCenterPointDefault();
-			
 		}
 	}
 	

@@ -78,6 +78,7 @@ containing a value of this type.
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
+        public static final int targetbox=0x7f020001;
     }
     public static final class id {
         public static final int AboutActivity_backButton=0x7f070000;
@@ -90,7 +91,7 @@ containing a value of this type.
         public static final int camera_layout=0x7f070012;
         public static final int crosshairView=0x7f070013;
         public static final int gyroangle=0x7f070014;
-        public static final int menu_settings=0x7f070016;
+        public static final int menu_settings=0x7f070017;
         public static final int radioButton1=0x7f070007;
         public static final int radioButton2=0x7f070008;
         public static final int selectedRange=0x7f070015;
@@ -100,6 +101,7 @@ containing a value of this type.
         public static final int tableRow2=0x7f070009;
         public static final int tableRow3=0x7f07000c;
         public static final int tableRow4=0x7f07000f;
+        public static final int targetingBoxView=0x7f070016;
         public static final int textView1=0x7f070006;
         public static final int textView2=0x7f07000a;
         public static final int textView3=0x7f07000d;
