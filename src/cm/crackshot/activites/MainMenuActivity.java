@@ -2,9 +2,12 @@ package cm.crackshot.activites;
 
 import cm.crackshot.R;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,9 +15,12 @@ import android.widget.Button;
 
 public class MainMenuActivity extends Activity implements OnClickListener
 {
-	boolean firstTimeRunningApp = true;
-	boolean hasCamera = false;
-	boolean hasGyroscope = false;
+	private boolean firstTimeRunningApp = true;
+	private boolean hasCamera = false;
+	private boolean hasGyroscope = false;
+	
+	private SharedPreferences sharedPref;
+	private SharedPreferences.Editor editor;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -23,9 +29,22 @@ public class MainMenuActivity extends Activity implements OnClickListener
 		setContentView(R.layout.activity_main_menu);
 		
 		registerViewListeners();
-		checkIfFirstTime();
+		//checkIfFirstTime();
 		checkCameraGyroscopeAvailabililty();
 		checkCameraAvailability();
+	}
+	
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		
+		firstTimeRunningApp = false;
+		
+		sharedPref = getPreferences(Context.MODE_PRIVATE);
+		editor = sharedPref.edit();
+		editor.putBoolean("firstTime", firstTimeRunningApp);
+		editor.commit();
 	}
 
 	private void checkCameraGyroscopeAvailabililty() 
@@ -44,11 +63,6 @@ public class MainMenuActivity extends Activity implements OnClickListener
 	{
 		PackageManager pm = getPackageManager();
 		hasGyroscope = pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_GYROSCOPE);
-	}
-
-	private void checkIfFirstTime() 
-	{
-		// TODO Check is first time running the app
 	}
 
 	private void registerViewListeners() 

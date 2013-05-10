@@ -6,16 +6,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-public class CalibrationDialogFragment extends DialogFragment 
+public class CalibrationDialogFragment extends DialogFragment
 {
 	OnOptionSelectedListener optionSelectedListener;
 	
 	public interface OnOptionSelectedListener
 	{
-		public void onOptionSelected(int id);
+		public void onDialogOptionSelected(int id);
 	}
 	
 	@Override
@@ -44,7 +45,7 @@ public class CalibrationDialogFragment extends DialogFragment
 				@Override
 				public void onClick(DialogInterface dialog, int id) 
 				{
-					optionSelectedListener.onOptionSelected(id);
+					optionSelectedListener.onDialogOptionSelected(id);
 				}
 			})
 			.setNegativeButton(R.string.CalibrationDialogFragment_Default, new DialogInterface.OnClickListener()
@@ -52,7 +53,7 @@ public class CalibrationDialogFragment extends DialogFragment
 				@Override
 				public void onClick(DialogInterface dialog, int id) 
 				{
-					optionSelectedListener.onOptionSelected(id);
+					optionSelectedListener.onDialogOptionSelected(id);
 					
 					/*// TODO Should send back center coordinates of device	
 					StartActivity startActivity = (StartActivity) getActivity();

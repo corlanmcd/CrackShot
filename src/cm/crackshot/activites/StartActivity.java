@@ -3,12 +3,15 @@ package cm.crackshot.activites;
 import java.util.List;
 import java.util.Timer;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
@@ -17,7 +20,9 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -29,67 +34,97 @@ import cm.crackshot.views.CameraScopeView;
 import cm.crackshot.views.CrosshairView;
 
 public class StartActivity extends FragmentActivity implements SensorEventListener, 
-	CalibrationDialogFragment.OnOptionSelectedListener
+	CalibrationDialogFragment.OnOptionSelectedListener, OnTouchListener
 {
 	private static final int TIME_CONSTANT = 30;
-	private Camera mCamera;
-    private CameraScopeView mPreview;
-	
+
+    private boolean centerpointLocked = false;
 	private boolean hasCamera;
 	private boolean hasGyroscope;
 	private int selectedRange = 25;
 	
 	private Ballistics ballistics;
-	
-	private DisplayMetrics metrics;
-	
-	public Handler handler;
-	
-	public Point centerPoint;
-	
+	private Camera mCamera;
+	private CameraInstanceTask cameraInstanceTask;
+    private CameraScopeView mPreview;
+    private CrosshairView crosshairView;
+	private DisplayMetrics metrics;	
+	private Handler handler;
+	private Point centerpoint;
 	private SensorAngles sensorAngles;
-	
 	private SensorManager sensorManager;
-	
+	private SharedPreferences sharedPref;
+	private SharedPreferences.Editor editor;
 	private Timer fuseTimer;
-	
 	private TextView angleView;
 	private TextView selectedRangeView;
 	
-	//private CrosshairView crosshairView;
-	
-	private CrosshairView crosshairView;
-	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_start);
+		setContentView		(R.layout.activity_start);
 		
-		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		sensorManager 		= (SensorManager) getSystemService(SENSOR_SERVICE);
 
-		handler = new Handler();
+		handler 			= new Handler();
+		centerpoint 		= new Point();
+		sharedPref 			= getPreferences(Context.MODE_PRIVATE);
 		
-		angleView = (TextView)findViewById(R.id.gyroangle);
-		selectedRangeView = (TextView)findViewById(R.id.selectedRange);
-		
-		crosshairView = (CrosshairView)findViewById(R.id.crosshairView);
+		angleView 			= (TextView)findViewById(R.id.gyroangle);
+		selectedRangeView 	= (TextView)findViewById(R.id.selectedRange);
+		crosshairView 		= (CrosshairView)findViewById(R.id.crosshairView);
 				
 		initializationProcess();
 
 		retreieveCenterPointFromUserOrHistory();
 	}
+	
+	@Override
+	public void onResume() 
+	{
+		super.onResume();
+		
+		/*if(mCamera == null)
+		{
+			mCamera = getCameraInstance();
+		}*/
+		
+		if(sensorManager != null) 
+		{
+			registerSensorListeners();
+		}
+	}
+	
+    @Override
+    public void onStop() 
+    {
+    	super.onStop();
+    	releaseCamera();
+    	saveCenterpointToSharedPref();
+    	sensorManager.unregisterListener(this);
+    }
+    
+    @Override
+    protected void onPause() 
+    {
+        super.onPause();
+        releaseCamera();
+        sensorManager.unregisterListener(this);
+    }
 
 	private void retreieveCenterPointFromUserOrHistory() 
 	{
-		if (getIntent().getExtras().getBoolean("firstTimeRunningApp"))
+		if (sharedPref.getBoolean("centerpointLocked", false))
 		{
 			askUserCenterPointOption();
 		}
 		else
 		{
-			//TODO
-			retrieveCenterPointFromHistory();
+			retrieveCenterPointFromSharedPref();
+			drawHUD();
 		}		
 	}
 	
@@ -109,40 +144,41 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 
 	private void checkCameraAndGyrscopeAvailability() 
 	{
-		hasCamera = getIntent().getExtras().getBoolean("hasCamera");
-		hasGyroscope = getIntent().getExtras().getBoolean("hasGyroscope");
+		hasCamera 		= getIntent().getExtras().getBoolean("hasCamera");
+		hasGyroscope 	= getIntent().getExtras().getBoolean("hasGyroscope");
 		
 		if(hasCamera)
+		{	
 			initializeCamera();
+		}
 	}
 
 	private void initializeCamera() 
 	{
-		mCamera = getCameraInstance();
-		mCamera.setDisplayOrientation(90);
-		mCamera.startPreview();
-		
-		enableCameraFocusFeature();
-		addCameraToCameraView();
+		if(mCamera == null)
+		{
+			cameraInstanceTask = new CameraInstanceTask();
+			cameraInstanceTask.execute();
+		}
 	}
 
 	private void addCameraToCameraView()
 	{
-		mPreview = new CameraScopeView(this, mCamera);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_layout);
+		mPreview 				= new CameraScopeView(this, mCamera);
+        FrameLayout preview 	= (FrameLayout) findViewById(R.id.camera_layout);
+        
         preview.addView(mPreview);	
 	}
 
 	private void enableCameraFocusFeature() 
 	{
-		Camera.Parameters params = mCamera.getParameters();
-
-		List<String> focusModes = params.getSupportedFocusModes();
+		Camera.Parameters params 	= mCamera.getParameters();
+		List<String> focusModes 	= params.getSupportedFocusModes();
 		
 		if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) 
 		{
-			params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-			mCamera.setParameters(params);
+			params	.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+			mCamera	.setParameters(params);
 		}
 	}
 
@@ -163,39 +199,20 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 	}
 
-	@Override
-	public void onResume() 
+	    
+	private void releaseCamera()
 	{
-		super.onResume();
-		
-		mCamera = getCameraInstance();
-		
-		if(sensorManager != null) 
+		if (mCamera != null)
 		{
-			registerSensorListeners();
-		}
+            mCamera.release();        // release the camera for other applications
+            mCamera = null;
+        }		
 	}
-	
-    @Override
-    public void onStop() 
-    {
-    	super.onStop();
-    	releaseCamera();
-    	sensorManager.unregisterListener(this);
-    }
-    
-    @Override
-    protected void onPause() 
-    {
-        super.onPause();
-        releaseCamera();
-        sensorManager.unregisterListener(this);
-    }
         
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) 
     {
-        int action = event.getAction();
+        int action 	= event.getAction();
         int keyCode = event.getKeyCode();
         
         switch (keyCode) 
@@ -263,54 +280,51 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 	{
 	}
 
-	private void releaseCamera()
-	{
-		if (mCamera != null)
-		{
-            mCamera.release();        // release the camera for other applications
-            mCamera = null;
-        }		
-	}
-
 	private void registerSensorListeners() 
 	{
-		sensorManager.registerListener(this, 
-				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
-				SensorManager.SENSOR_DELAY_FASTEST);
+		sensorManager.registerListener(	this, 
+										sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
+										SensorManager.SENSOR_DELAY_FASTEST);
 		
-		sensorManager.registerListener(this, 
-				sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 
-				SensorManager.SENSOR_DELAY_FASTEST);
+		sensorManager.registerListener(	this, 
+										sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 
+										SensorManager.SENSOR_DELAY_FASTEST);
 		
-		if (hasGyroscope) {
-			sensorManager.registerListener(this, 
-					sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), 
-					SensorManager.SENSOR_DELAY_FASTEST);
+		if (hasGyroscope) 
+		{
+			sensorManager.registerListener(	this, 
+											sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), 
+											SensorManager.SENSOR_DELAY_FASTEST);
 		}
 	}
 	
-	private void retrieveCenterPointFromHistory()
+	private void retrieveCenterPointFromSharedPref()
 	{
-		// TODO Retrieve centerpoint from History		
+		centerpoint.x = sharedPref.getInt("centerpointX", 1);
+		centerpoint.y = sharedPref.getInt("centerpointY", 1);
+	}
+	
+	private void saveCenterpointToSharedPref()
+	{
+		editor = sharedPref.edit();
+		editor.putBoolean("centerpointLocked", centerpointLocked);
+		editor.putInt("centerpointX", centerpoint.x);
+		editor.putInt("centerpointY", centerpoint.y);
+		editor.commit();
 	}
 
 	private void drawHUD() 
 	{
 		drawCrosshair();
-		//dawOtherHUDComponents();
+		//TODO dawOtherHUDComponents();
 	}
 
 	private void drawCrosshair() 
 	{
-		crosshairView.setCenterPoint(centerPoint);
+		crosshairView.setCenterPoint(centerpoint);
 		crosshairView.setSelectedRange(getRange());
 		crosshairView.setRotation(sensorAngles.getPitchAngle());
 		crosshairView.setVisibility(View.VISIBLE);
-	}
-
-	private void configureCenterPoint() 
-	{
-		// TODO Grab coordinates from touchscreen tap
 	}
 
 	private void askUserCenterPointOption() 
@@ -319,21 +333,82 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 		calibrationOptionDialog.setCancelable(false);
 		calibrationOptionDialog.show(getSupportFragmentManager(), "calibration");
 	}
-
+	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_start, menu);
 		return true;
 	}
-	
-	public void askUserToSelectCenterPointFromScreen()
+
+	public void updateHUD()
 	{
-		// TODO Implement touch and grab coordinates
+		handler.post(updateCrosshairAngleTask);
 	}
 
-	@Override
-	public void onAccuracyChanged(Sensor arg0, int arg1) {
+	private void setCenterPointDefault() 
+	{
+		centerpointLocked 	= true;
+		centerpoint 		= new Point(metrics.widthPixels/2, metrics.heightPixels/2);
+		
+		saveCenterpointToSharedPref();
+		drawHUD();
+	}
+	
+	private Runnable updateCrosshairAngleTask = new Runnable()
+	{
+		public void run()
+		{
+			updateCrosshairAngle();
+		}
+	};
+
+	private void updateCrosshairAngle()
+	{
+		angleView		.setText(Float.toString(sensorAngles.getPitchAngle()));
+		crosshairView	.setSelectedRange(getRange());
+		crosshairView	.invalidate();
+		crosshairView	.setRotation(-(int)sensorAngles.getRollAngle());
+	}
+	
+	public static Camera getCameraInstance()
+	{
+	    Camera c = null;
+	    
+	    try 
+	    {
+	        c = Camera.open(); // attempt to get a Camera instance
+	    }
+	    catch (Exception e)
+	    {
+	        // Camera is not available (in use or does not exist)
+	    	Log.e("Camera", "Could not get instance of camera!");
+	    }
+	    
+	    return c; // returns null if camera is unavailable
+	}
+	
+    @Override
+	public void onDialogOptionSelected(int id) 
+	{
+		if(id == -1) // Dialog "Positive" Button Selected - "Configure"
+		{
+			Log.e("CALLBACK", "Configure Callback Works");
+			//configureCenterPoint();
+			
+			//Grab coordinates from OnTouchEvent Listener
+		}
+		if (id == -2) // Dialog "Negative" Button Selected - "Default"
+		{
+			Log.e("CALLBACK", "Default Callback Works");
+			setCenterPointDefault();
+		}
+	}
+    
+    @Override
+	public void onAccuracyChanged(Sensor arg0, int arg1) 
+    {
 	}
 
 	@Override
@@ -359,61 +434,60 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 		
 		updateHUD();
 	}
+	
+    // Configure from Touch
+ 	@Override
+ 	public boolean onTouchEvent(MotionEvent event) 
+ 	{
+ 		if(!centerpointLocked)
+ 		{	
+ 			centerpoint 		= new Point((int)event.getX(), (int)event.getY());
+ 			centerpointLocked 	= true;
+ 			
+ 			saveCenterpointToSharedPref();
+ 			Log.e("Touch", centerpoint.x + " " + centerpoint.y);
+ 			
+ 			saveCenterpointToSharedPref();
+ 			drawHUD();
+ 		}
+ 		
+ 		return false;
+ 	}
 
-	public void updateHUD()
-	{
-		handler.post(updateCrosshairAngleTask);
-	}
+ 	@Override
+ 	public boolean onTouch(View v, MotionEvent event) 
+ 	{
+ 		return false;
+ 	}
+ 	
+ 	private class CameraInstanceTask extends AsyncTask<Void, Void, Camera>
+ 	{
+ 		@Override
+		protected Camera doInBackground(Void... arg) 
+ 		{
+			Camera c = null;
+		    
+		    try 
+		    {
+		        c = Camera.open(); // attempt to get a Camera instance
+		    }
+		    catch (Exception e)
+		    {
+		        // Camera is not available (in use or does not exist)
+		    	Log.e("Camera", "Could not get instance of camera!");
+		    }
+		    
+		    return c; // returns null if camera is unavailable
+		}
 
-	private void setCenterPointDefault() 
-	{
-		centerPoint = new Point(metrics.widthPixels/2, metrics.heightPixels/2);
-		drawHUD();
-	}
-	
-	private Runnable updateCrosshairAngleTask = new Runnable() {
-		public void run()
-		{
-			updateCrosshairAngle();
-		}
-	};
-	
-	private void updateCrosshairAngle()
-	{
-		angleView.setText(Float.toString(sensorAngles.getPitchAngle()));
-		crosshairView.setSelectedRange(getRange());
-		crosshairView.invalidate();
-		crosshairView.setRotation(-(int)sensorAngles.getRollAngle());
-	}
-	
-	@Override
-	public void onOptionSelected(int id) 
-	{
-		if(id == -1) // Dialog "Positive" Button Selected - "Configure"
-		{
-			Log.e("CALLBACK", "Configure Callback Works");
-			configureCenterPoint();
-		}
-		if (id == -2) // Dialog "Negative" Button Selected - "Default"
-		{
-			Log.e("CALLBACK", "Default Callback Works");
-			setCenterPointDefault();
-		}
-	}
-	
-	public static Camera getCameraInstance()
-	{
-	    Camera c = null;
-	    
-	    try 
-	    {
-	        c = Camera.open(); // attempt to get a Camera instance
-	    }
-	    catch (Exception e)
-	    {
-	        // Camera is not available (in use or does not exist)
-	    }
-	    
-	    return c; // returns null if camera is unavailable
-	}
+ 	     protected void onPostExecute(Camera c) 
+ 	     {
+ 	    	mCamera = c;
+ 	    	mCamera.setDisplayOrientation(90);
+			mCamera.startPreview();
+			
+			enableCameraFocusFeature();
+			addCameraToCameraView();
+ 	     }
+ 	 }
 }

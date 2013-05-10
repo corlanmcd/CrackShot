@@ -91,7 +91,7 @@ public class CrosshairView extends View
 
 	private void drawVerticalLine(Canvas canvas) 
 	{
-		canvas.drawLine(centerPoint.x, 0, centerPoint.x, 2 * centerPoint.y, paint);
+		canvas.drawLine(centerPoint.x, 0, centerPoint.x, getHeight(), paint);
 	}
 	
 	private void drawHorizontalLines(Canvas canvas) 
