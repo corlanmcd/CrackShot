@@ -26,36 +26,38 @@ public class CrosshairView extends View
 	
 	private int selectedRange;
 	private Paint paint;
-	private Point centerPoint;
+	private Point centerpoint;
+	private Point targetingPoint;
 	
 	public CrosshairView(Context context)
 	{
 		super(context);
-		init(null, 0);
+		initialization(null, 0);
 	}
 
 	public CrosshairView(Context context, AttributeSet attrs) 
 	{
 		super(context, attrs);
-		init(attrs, 0);
+		initialization(attrs, 0);
 	}
 
 	public CrosshairView(Context context, AttributeSet attrs, int defStyle) 
 	{
 		super(context, attrs, defStyle);
-		init(attrs, defStyle);
+		initialization(attrs, defStyle);
 	}
 
-	private void init(AttributeSet attrs, int defStyle) 
+	private void initialization(AttributeSet attrs, int defStyle) 
 	{
-		paint 			= new Paint();
-		centerPoint 	= new Point();
-		targetingBox 	= (ImageView)findViewById(R.id.targetingBoxView);
+		paint 				= new Paint();
+		centerpoint 		= new Point();
+		targetingPoint 		= new Point();
+		targetingBox 		= (ImageView)findViewById(R.id.targetingBoxView);
 	}
 	
-	public void setCenterPoint(Point centerPoint)
+	public void setCenterPoint(Point centerpoint)
 	{
-		this.centerPoint = centerPoint;		
+		this.centerpoint = targetingPoint = centerpoint;	
 	}
 
 	@Override
@@ -80,18 +82,23 @@ public class CrosshairView extends View
 		drawTargetingBox(canvas);
 	}
 
+	public void setTargetingBoxPosition(Point point)
+	{
+		targetingPoint = point;
+	}
 	private void drawTargetingBox(Canvas canvas) 
 	{
 		Bitmap targetingBox = BitmapFactory.decodeResource(getResources(), R.drawable.targetbox);
+
 		canvas.drawBitmap(targetingBox,
-						  (float) (centerPoint.x - (targetingBox.getWidth()/2)),
-						  (float) (centerPoint.y - (targetingBox.getHeight()/2)),
+						  (float) (targetingPoint.x - (targetingBox.getWidth()/2)),
+						  (float) (targetingPoint.y - (targetingBox.getHeight()/2)),
 						  paint);
 	}
 
 	private void drawVerticalLine(Canvas canvas) 
 	{
-		canvas.drawLine(centerPoint.x, 0, centerPoint.x, getHeight(), paint);
+		canvas.drawLine(centerpoint.x, 0, centerpoint.x, getHeight(), paint);
 	}
 	
 	private void drawHorizontalLines(Canvas canvas) 
@@ -111,10 +118,10 @@ public class CrosshairView extends View
 				paint.setColor(android.graphics.Color.RED);
 			}
 			
-			canvas.drawLine(centerPoint.x - lineLength + (count * 10),
-							centerPoint.y + (verticalSpacing * (count - 1)),
-							centerPoint.x + lineLength - (count * 10),
-							centerPoint.y + (verticalSpacing * (count - 1)),
+			canvas.drawLine(centerpoint.x - lineLength + (count * 10),
+							centerpoint.y + (verticalSpacing * (count - 1)),
+							centerpoint.x + lineLength - (count * 10),
+							centerpoint.y + (verticalSpacing * (count - 1)),
 							paint);
 		
 			count++;
@@ -144,5 +151,10 @@ public class CrosshairView extends View
 				selectedRange = 1;	
 				break;
 		}
+	}
+
+	public void setReticleColor(int parseColor) 
+	{
+		
 	}
 }
