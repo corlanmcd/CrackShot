@@ -28,8 +28,16 @@
         android:id="@+id/selectedRange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="300dp"
+        android:layout_gravity="top|right"
         android:text="@string/StartActivity_selectedRange"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/ammoSelectionButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:text="@string/StartActivity_ammoSelectionButtonText" />
 
 </FrameLayout>

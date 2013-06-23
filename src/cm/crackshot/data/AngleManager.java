@@ -6,12 +6,12 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-public class SensorAngles 
+public class AngleManager 
 {
 	private boolean hasGyroscope;
 	private boolean initState 		= true;
 	
-	private static final float a 					= 0.02f;						// value used in low pass filter
+	private static final float a 					= 0.1f;						// value used in low pass filter
 	private static final float EPSILON 				= 0.000000001f;				// offset used in low pass filter
 	private static final float FILTER_COEFFICIENT = 0.98f;
 	private static final float NS2S 				= 1.0f / 1000000000.0f;		//NS2S converts nanoseconds to seconds
@@ -29,7 +29,7 @@ public class SensorAngles
 	private float[] orientationValues 		= new float[3];
 	private float[] temporaryRotationMatrix = new float[9];
 		
-	public SensorAngles(boolean hasGyroscope)
+	public AngleManager(boolean hasGyroscope)
 	{
 		this.hasGyroscope = hasGyroscope;
 	}

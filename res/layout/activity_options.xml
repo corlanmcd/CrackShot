@@ -1,83 +1,59 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/TableLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
     tools:context=".OptionsActivity" >
 
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <RadioButton
-            android:id="@+id/radioButton1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RadioButton" />
-
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RadioButton" />
-
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/tableRow2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <Spinner
-            android:id="@+id/spinner1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/tableRow3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <Spinner
-            android:id="@+id/spinner2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/tableRow4"
+    <TextView
+        android:id="@+id/OptionsActivity_measurement_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center" >
+        android:layout_gravity="left"
+        android:text="@string/OptionsActivity_measurementSystemText" />
 
-        <Button
-            android:id="@+id/OptionsActivity_backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
+    <RadioButton
+        android:id="@+id/OptionsActivity_meters_radiobox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/OptionsActivity_metersText" />
 
-    </TableRow>
+    <RadioButton
+        android:id="@+id/OptionsActivity_yards_radiobox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="@string/OptionsActivity_yardsText" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/OptionsActivity_reticleColorText" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="69dp"
+        android:text="@string/OptionsActivity_targetBoxColorText" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="19dp" />
+
+    <Button
+        android:id="@+id/OptionsActivity_backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/OptionsActivity_backButtonText" />
 
 </TableLayout>

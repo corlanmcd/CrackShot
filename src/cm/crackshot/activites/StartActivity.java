@@ -23,28 +23,32 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import cm.crackshot.R;
 import cm.crackshot.data.Ballistics;
-import cm.crackshot.data.SensorAngles;
+import cm.crackshot.data.AngleManager;
 import cm.crackshot.fragments.CalibrationDialogFragment;
 import cm.crackshot.views.CameraScopeView;
 import cm.crackshot.views.CrosshairView;
 
 public class StartActivity extends FragmentActivity implements SensorEventListener, 
-	CalibrationDialogFragment.OnOptionSelectedListener, OnTouchListener
+	CalibrationDialogFragment.OnOptionSelectedListener, OnTouchListener, OnClickListener
 {
 	private static final int TIME_CONSTANT = 30;
 
-    private boolean centerpointLocked = false;
-	private boolean hasCamera;
-	private boolean hasGyroscope;
-	private int 	selectedRange = 25;
+    private boolean centerpointLocked 	= false;
+	private boolean hasCamera 			= false;
+	private boolean hasGyroscope		= false;
+	private int 	selectedRange 		= 25;
+	private String	ammoType 			= "round";
 	
 	private Ballistics 					ballistics;
+	private Button						ammoSelectionButton;
 	private Camera 						mCamera;
 	private CameraInstanceTask 			cameraInstanceTask;
     private CameraScopeView 			mPreview;
@@ -52,7 +56,7 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 	private DisplayMetrics 				metrics;	
 	private Handler 					handler;
 	private Point 						centerpoint;
-	private SensorAngles 				sensorAngles;
+	private AngleManager 				angleManager;
 	private SensorManager 				sensorManager;
 	private SharedPreferences 			sharedPref;
 	private SharedPreferences.Editor 	editor;
@@ -70,17 +74,19 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 		
 		sensorManager 		= (SensorManager) getSystemService(SENSOR_SERVICE);
 
+		ballistics 			= new Ballistics();
 		handler 			= new Handler();
 		centerpoint 		= new Point();
+		
 		sharedPref 			= getPreferences(Context.MODE_PRIVATE);
 		
+		ammoSelectionButton = (Button)findViewById(R.id.ammoSelectionButton);
+		ammoSelectionButton.setOnClickListener(this);
 		angleView 			= (TextView)findViewById(R.id.gyroangle);
 		selectedRangeView 	= (TextView)findViewById(R.id.selectedRange);
 		crosshairView 		= (CrosshairView)findViewById(R.id.crosshairView);
 				
 		initializationProcess();
-
-		retreieveCenterPointFromUserOrHistory();
 	}
 	
 	@Override
@@ -122,15 +128,17 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 
     private void initializationProcess() 
 	{
-		checkCameraAndGyrscopeAvailability();
-		initializeSensorAngles();
-		initializeFuseTimer();
-		initializeMetrics();
-		registerSensorListeners();
-		getCenterpointLockFromSharedPref();
+		if(hasCameraAndGyrscopeAvailability())
+		{
+			initializeAngleManagerAndFuseTimer();
+			initializeMetrics();
+			registerSensorListeners();
+			getCenterpointLockFromSharedPref();
+			retreieveCenterPointFromUserOrHistory();
+		}
 	}
     
-    private void checkCameraAndGyrscopeAvailability() 
+    private boolean hasCameraAndGyrscopeAvailability() 
 	{
 		hasCamera 		= getIntent().getExtras().getBoolean("hasCamera");
 		hasGyroscope 	= getIntent().getExtras().getBoolean("hasGyroscope");
@@ -138,7 +146,11 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 		if(hasCamera)
 		{	
 			initializeCamera();
+			
+			return true;
 		}
+		
+		return false;
 	}
     
     private void initializeCamera() 
@@ -150,17 +162,14 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 		}
 	}
     
-    private void initializeSensorAngles() 
+    private void initializeAngleManagerAndFuseTimer() 
 	{
-		sensorAngles = new SensorAngles(hasGyroscope);
-	}
-
-	private void initializeFuseTimer() 
-	{
+		angleManager = new AngleManager(hasGyroscope);
+		
 		fuseTimer = new Timer();
-		fuseTimer.scheduleAtFixedRate(sensorAngles.new calculateFusedOrientationTask(), 1000, TIME_CONSTANT);
+		fuseTimer.scheduleAtFixedRate(angleManager.new calculateFusedOrientationTask(), 1000, TIME_CONSTANT);
 	}
-	
+    
 	private void initializeMetrics() 
 	{
 		metrics = new DisplayMetrics();
@@ -187,7 +196,7 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 	
 	private void getCenterpointLockFromSharedPref() 
 	{
-		centerpointLocked = sharedPref.getBoolean("centerpointLocked", false);
+		centerpointLocked = false; //sharedPref.getBoolean("centerpointLocked", false);
 	}
 	
 	private void retreieveCenterPointFromUserOrHistory() 
@@ -226,31 +235,16 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 	private void drawCrosshair() 
 	{
 		crosshairView.setCenterPoint(centerpoint);
-		crosshairView.setSelectedRange(getRange());
-		crosshairView.setRotation(sensorAngles.getPitchAngle());
+		crosshairView.setSelectedRange(selectedRange);
+		crosshairView.setRotation(angleManager.getPitchAngle());
 		crosshairView.setVisibility(View.VISIBLE);
 	}
-	
-	private void drawCrosshair(Point point)
-	{
-		//TODO 
-		crosshairView.setCenterPoint(point); //centerpoint);
-		crosshairView.setSelectedRange(getRange());
-		crosshairView.setRotation(sensorAngles.getPitchAngle());
-		crosshairView.setVisibility(View.VISIBLE);
-	}
-	
-	public int getRange()
-	{
-		return Integer.valueOf((String) selectedRangeView.getText());
-	}
-	
+			
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) 
     {
         int action 	= event.getAction();
         int keyCode = event.getKeyCode();
-        Point point = new Point();
         
         switch (keyCode) 
         {
@@ -271,12 +265,13 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
                     		selectedRange = 75;
                     		break;
                     	case 125:
-                    		selectedRange = 100;
+                    		if(ammoType.equals("shaped"))
+                    		{
+                    			selectedRange = 100;
+                    		}
                     		break;
                     }
-                	//point.x = centerpoint.x;
-                	//point.y = point.y - (selectedRange);
-                    //updateSelectedRangeTextAndTargeting(point);
+                    updateSelectedRangeTextAndTargeting();
                 }
                 return true;
                 
@@ -292,7 +287,10 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
                     		selectedRange = 75;
                     		break;
                     	case 75:
-                    		selectedRange = 100;
+                    		if(ammoType.equals("shaped"))
+                    		{
+                    			selectedRange = 100;
+                    		}
                     		break;
                     	case 100:
                     		selectedRange = 125;
@@ -300,9 +298,7 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
                     	case 125:
                     		break;
                     }
-                	//point.x = centerpoint.x;
-                	//point.y = centerpoint.y + selectedRange;
-                    //updateSelectedRangeTextAndTargeting(point);
+                    updateSelectedRangeTextAndTargeting();
                 }
                 return true;
                 
@@ -311,10 +307,9 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
         }
     }
     
-	private void updateSelectedRangeTextAndTargeting(Point point)
+	private void updateSelectedRangeTextAndTargeting()
 	{
 		selectedRangeView.setText(Integer.toString(selectedRange));
-		crosshairView.setTargetingBoxPosition(point);
 		//updateTargetingBox();
 	}
 
@@ -389,15 +384,15 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 			switch (event.sensor.getType()) 
 			{
 				case Sensor.TYPE_ACCELEROMETER:
-					sensorAngles.calculateAccelMagneticOrientation(event);
+					angleManager.calculateAccelMagneticOrientation(event);
 					break;
 				
 				case Sensor.TYPE_GYROSCOPE:
-					sensorAngles.calculateGyroscopicOrientation(event);
+					angleManager.calculateGyroscopicOrientation(event);
 					break;
 				
 				case Sensor.TYPE_MAGNETIC_FIELD:
-					sensorAngles.setMagneticField(event);
+					angleManager.setMagneticField(event);
 					break;
 			}
 		}
@@ -407,28 +402,39 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 	
 	private void updateHUD()
 	{
-		handler.post(updateCrosshairAngleTask);
+		handler.post(updateAngleAndTargetting);
 	}
 	
-	private Runnable updateCrosshairAngleTask = new Runnable()
+	private Runnable updateAngleAndTargetting = new Runnable()
 	{
 		public void run()
 		{
 			updateCrosshairAngle();
-			
-			if (Math.abs(sensorAngles.getPitchAngle() - getRange()) < .15)
-			{
-				crosshairView.setReticleColor(android.graphics.Color.parseColor("99CC00"));
-			}
+			updateTargetingBox();
 		}
 	};
 	
 	private void updateCrosshairAngle()
 	{
-		angleView		.setText(Float.toString(sensorAngles.getPitchAngle()));
-		crosshairView	.setSelectedRange(getRange());
+		angleView		.setText(Float.toString(angleManager.getPitchAngle()));
+		angleView		.setTextColor(android.graphics.Color.RED);
+		selectedRangeView.setTextColor(android.graphics.Color.RED);
+		crosshairView	.setSelectedRange(selectedRange);
 		crosshairView	.invalidate();
-		crosshairView	.setRotation(-(int)sensorAngles.getRollAngle());
+		crosshairView	.setRotation(-(int)angleManager.getRollAngle());
+	}
+	
+	private void updateTargetingBox()
+	{
+		// The value of the pitch angle above the horizontal is always negative (due to camera coord remap)
+		if (Math.abs(angleManager.getPitchAngle() - ballistics.getAngleByDistance(ammoType, selectedRange)) <= 1.0f)
+		{
+			crosshairView.setGoodAngle(true);
+		}
+		else
+		{
+			crosshairView.setGoodAngle(false);
+		}
 	}
 
  	@Override
@@ -476,8 +482,21 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
 		if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) 
 		{
 			params	.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-			mCamera	.setParameters(params);
 		}
+		
+		params.setSceneMode(Camera.Parameters.SCENE_MODE_HDR);
+		
+		if(params.isVideoStabilizationSupported())
+		{
+			params.setVideoStabilization(true);
+		}
+		
+		if(params.getMinExposureCompensation() != 0 && params.getMaxExposureCompensation() != 0)
+		{
+			params.setExposureCompensation(params.getMaxExposureCompensation());
+		}
+		
+		mCamera	.setParameters(params);
 	}
  	
  	private void addCameraToCameraView()
@@ -495,5 +514,29 @@ public class StartActivity extends FragmentActivity implements SensorEventListen
             mCamera.release();        // release the camera for other applications
             mCamera = null;
         }		
+	}
+
+	@Override
+	public void onClick(View view) 
+	{
+		if(view.getId() == R.id.ammoSelectionButton)
+		{
+			if(ammoType.equals("shaped"))
+			{
+				ammoType = "round";
+				ammoSelectionButton.setText("ROUND");
+			}
+			else
+			{
+				ammoType = "shaped";
+				ammoSelectionButton	.setText("SHAPED");
+			}
+			
+			// TODO Callbacks?
+			selectedRange = 25;
+			selectedRangeView.setText(String.valueOf(selectedRange));
+			crosshairView.setAmmoType(ammoType);
+		}
+		
 	}
 }

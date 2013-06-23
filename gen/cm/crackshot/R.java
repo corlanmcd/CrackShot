@@ -76,35 +76,41 @@ containing a value of this type.
          */
         public static final int exampleString1=0x7f010000;
     }
+    public static final class color {
+        public static final int nice_orange=0x7f040000;
+    }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
-        public static final int targetbox=0x7f020001;
+        public static final int crackshottitle=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
+        public static final int mainmenucrack=0x7f020002;
+        public static final int targetbox=0x7f020003;
+        public static final int targetboxgreen=0x7f020004;
+        public static final int targetboxred=0x7f020005;
     }
     public static final class id {
-        public static final int AboutActivity_backButton=0x7f070000;
-        public static final int FrameLayout1=0x7f070011;
-        public static final int MainMenuActivity_aboutButton=0x7f070003;
-        public static final int MainMenuActivity_optionsButton=0x7f070002;
-        public static final int MainMenuActivity_startButton=0x7f070001;
-        public static final int OptionsActivity_backButton=0x7f070010;
-        public static final int TableLayout1=0x7f070004;
-        public static final int camera_layout=0x7f070012;
-        public static final int crosshairView=0x7f070013;
-        public static final int gyroangle=0x7f070014;
-        public static final int menu_settings=0x7f070017;
-        public static final int radioButton1=0x7f070007;
-        public static final int radioButton2=0x7f070008;
-        public static final int selectedRange=0x7f070015;
-        public static final int spinner1=0x7f07000b;
-        public static final int spinner2=0x7f07000e;
-        public static final int tableRow1=0x7f070005;
-        public static final int tableRow2=0x7f070009;
-        public static final int tableRow3=0x7f07000c;
-        public static final int tableRow4=0x7f07000f;
-        public static final int targetingBoxView=0x7f070016;
-        public static final int textView1=0x7f070006;
-        public static final int textView2=0x7f07000a;
-        public static final int textView3=0x7f07000d;
+        public static final int AboutActivity_backButton=0x7f080000;
+        public static final int FrameLayout1=0x7f08000f;
+        public static final int MainMenuActivity_aboutButton=0x7f080004;
+        public static final int MainMenuActivity_optionsButton=0x7f080003;
+        public static final int MainMenuActivity_startButton=0x7f080002;
+        public static final int OptionsActivity_backButton=0x7f08000e;
+        public static final int OptionsActivity_measurement_text=0x7f080007;
+        public static final int OptionsActivity_meters_radiobox=0x7f080008;
+        public static final int OptionsActivity_yards_radiobox=0x7f080009;
+        public static final int TableLayout1=0x7f080006;
+        public static final int ammoSelectionButton=0x7f080014;
+        public static final int camera_layout=0x7f080010;
+        public static final int crosshairView=0x7f080011;
+        public static final int gyroangle=0x7f080012;
+        public static final int imageView1=0x7f080005;
+        public static final int imageView2=0x7f080001;
+        public static final int menu_settings=0x7f080016;
+        public static final int selectedRange=0x7f080013;
+        public static final int spinner1=0x7f08000d;
+        public static final int spinner2=0x7f08000b;
+        public static final int targetingBoxView=0x7f080015;
+        public static final int textView2=0x7f08000c;
+        public static final int textView3=0x7f08000a;
     }
     public static final class layout {
         public static final int activity_about=0x7f030000;
@@ -115,34 +121,35 @@ containing a value of this type.
         public static final int view_crosshair=0x7f030005;
     }
     public static final class menu {
-        public static final int activity_about=0x7f060000;
-        public static final int activity_main_menu=0x7f060001;
-        public static final int activity_options=0x7f060002;
-        public static final int activity_start=0x7f060003;
+        public static final int activity_about=0x7f070000;
+        public static final int activity_main_menu=0x7f070001;
+        public static final int activity_options=0x7f070002;
+        public static final int activity_start=0x7f070003;
     }
     public static final class string {
-        public static final int CalibrationDialogFragment_Configure=0x7f040011;
-        public static final int CalibrationDialogFragment_Default=0x7f040013;
-        public static final int CalibrationDialogFragment_Header=0x7f040010;
-        public static final int CalibrationDialogFragment_Message=0x7f040012;
-        public static final int OptionsActivity_backButtonText=0x7f040009;
-        public static final int OptionsActivity_measurementSystemText=0x7f04000a;
-        public static final int OptionsActivity_metersText=0x7f04000d;
-        public static final int OptionsActivity_reticleColorText=0x7f04000b;
-        public static final int OptionsActivity_targetBoxColorText=0x7f04000c;
-        public static final int OptionsActivity_yardsText=0x7f04000e;
-        public static final int StartActivity_selectedRange=0x7f040015;
-        public static final int aboutMainActivityButtonText=0x7f040004;
-        public static final int app_name=0x7f040000;
-        public static final int backAboutActivityButtonText=0x7f040007;
-        public static final int gyroAngle=0x7f040014;
-        public static final int hello_world=0x7f040006;
-        public static final int menu_settings=0x7f040001;
-        public static final int optionsMainActivityButtonText=0x7f040003;
-        public static final int startMainActivityButtonText=0x7f040002;
-        public static final int title_activity_about=0x7f040005;
-        public static final int title_activity_options=0x7f040008;
-        public static final int title_activity_start=0x7f04000f;
+        public static final int CalibrationDialogFragment_Configure=0x7f050011;
+        public static final int CalibrationDialogFragment_Default=0x7f050013;
+        public static final int CalibrationDialogFragment_Header=0x7f050010;
+        public static final int CalibrationDialogFragment_Message=0x7f050012;
+        public static final int OptionsActivity_backButtonText=0x7f050009;
+        public static final int OptionsActivity_measurementSystemText=0x7f05000a;
+        public static final int OptionsActivity_metersText=0x7f05000d;
+        public static final int OptionsActivity_reticleColorText=0x7f05000b;
+        public static final int OptionsActivity_targetBoxColorText=0x7f05000c;
+        public static final int OptionsActivity_yardsText=0x7f05000e;
+        public static final int StartActivity_ammoSelectionButtonText=0x7f050016;
+        public static final int StartActivity_selectedRange=0x7f050015;
+        public static final int aboutMainActivityButtonText=0x7f050004;
+        public static final int app_name=0x7f050000;
+        public static final int backAboutActivityButtonText=0x7f050007;
+        public static final int gyroAngle=0x7f050014;
+        public static final int hello_world=0x7f050006;
+        public static final int menu_settings=0x7f050001;
+        public static final int optionsMainActivityButtonText=0x7f050003;
+        public static final int startMainActivityButtonText=0x7f050002;
+        public static final int title_activity_about=0x7f050005;
+        public static final int title_activity_options=0x7f050008;
+        public static final int title_activity_start=0x7f05000f;
     }
     public static final class style {
         /** 
@@ -166,11 +173,11 @@ containing a value of this type.
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f050000;
+        public static final int AppBaseTheme=0x7f060000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f050001;
+        public static final int AppTheme=0x7f060001;
     }
     public static final class styleable {
         /** Attributes that can be used with a CameraScopeView.

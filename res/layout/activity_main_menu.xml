@@ -2,7 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/nice_orange"
     tools:context=".MainMenuActivity" >
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/hello_world"
+        android:src="@drawable/mainmenucrack" />
 
     <Button
         android:id="@+id/MainMenuActivity_startButton"
@@ -30,5 +38,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
         android:text="@string/aboutMainActivityButtonText" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
+        android:contentDescription="@string/hello_world"
+        android:src="@drawable/crackshottitle" />
 
 </RelativeLayout>
