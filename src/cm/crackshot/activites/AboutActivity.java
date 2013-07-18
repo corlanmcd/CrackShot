@@ -34,6 +34,15 @@ public class AboutActivity extends Activity implements OnClickListener
 	}
 
 	@Override
+    public void onBackPressed()
+    {
+    	Intent mainMenuIntent = new Intent(this, MainMenuActivity.class);
+		startActivity(mainMenuIntent);
+		
+		finish();
+    }
+	
+	@Override
 	public void onClick(View view) 
 	{
 		if (view.getId() == R.id.AboutActivity_backButton)

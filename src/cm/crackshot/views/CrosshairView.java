@@ -4,13 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageView;
 import cm.crackshot.R;
 
 /**
@@ -18,14 +15,16 @@ import cm.crackshot.R;
  */
 public class CrosshairView extends View 
 {
-	private int scopeRadius;
-	private int selectedRange;
+	private int 	reticleColor;
+	private int 	scopeColor;
+	private int 	scopeOffset;
+	private int 	scopeRadius;
+	private int 	selectedRange;
 	private boolean goodAngle;
-	private String ammoType = "round";
+	private String 	ammoType;
 	
-	private Paint paint;
-	private Point centerpoint;
-	private Point targetingPoint;
+	private Paint 	paint;
+	private Point 	targetingPoint;
 	
 	public CrosshairView(Context context)
 	{
@@ -47,16 +46,20 @@ public class CrosshairView extends View
 
 	private void initialization(AttributeSet attrs, int defStyle) 
 	{
+		ammoType			= "round";
 		goodAngle 			= false;
 		paint 				= new Paint();
-		centerpoint 		= new Point();
+		reticleColor 		= android.graphics.Color.RED;
+		scopeColor 			= 0xffff8800;
+		scopeOffset			= 0;
+		scopeRadius 		= (getWidth()/2) + 15;
 	}
 	
 	public void setCenterPoint(Point centerpoint)
 	{
-		this.centerpoint = targetingPoint = centerpoint;	
+		this.targetingPoint = centerpoint;
 	}
-	
+
 	public void setAmmoType(String ammoType)
 	{
 		this.ammoType = ammoType;
@@ -88,16 +91,26 @@ public class CrosshairView extends View
 	
 	private void drawReticle(Canvas canvas) 
 	{
+		paint.setColor(reticleColor);
+		
 		//Horizontal Line
-		canvas.drawLine(getWidth()/2 - 20, getHeight()/2, getWidth()/2 + 20, getHeight()/2, paint);
+		canvas.drawLine(getWidth()/2 - 20 + scopeOffset,
+				getHeight()/2,
+				getWidth()/2 + 20 + scopeOffset,
+				getHeight()/2,
+				paint);
 		
 		//Vertical Line
-		canvas.drawLine(getWidth()/2, getHeight()/2 - 20, getWidth()/2, getHeight()/2 + 20, paint);
+		canvas.drawLine(getWidth()/2 + scopeOffset,
+				getHeight()/2 - 20,
+				getWidth()/2 + scopeOffset,
+				getHeight()/2 + 20,
+				paint);
 	}
 
 	private void drawScopeCircle(Canvas canvas) 
 	{
-		scopeRadius = (getWidth()/2) + 15;
+		scopeRadius = (getWidth()/2) - 20;
 		
 		Paint scopePaint = new Paint();
 		
@@ -108,7 +121,7 @@ public class CrosshairView extends View
 		canvas.drawCircle(getWidth()/2, getHeight()/2, scopeRadius + 8, scopePaint);
 		
 		//Middle Circle
-		scopePaint.setColor(0xffff8800);
+		scopePaint.setColor(scopeColor);
 		scopePaint.setStrokeWidth(8.0f);
 		canvas.drawCircle(getWidth()/2, getHeight()/2, scopeRadius, scopePaint);	
 		
@@ -185,16 +198,28 @@ public class CrosshairView extends View
 		
 		
 		canvas.drawBitmap(scaledTargetingBoxImage,
-						  (float) (targetingPoint.x - (scaledTargetingBoxImage.getWidth()/2)),
+						  (float) (targetingPoint.x - (scaledTargetingBoxImage.getWidth()/2) + scopeOffset),
 						  (float) (getHeight()/2 + getPixelDistanceBasedonTargetingPoint()),
 						  paint);
 		
-		paint.setColor(0xffff8800);
-		canvas.drawLine((float) (getWidth()/2),
-						(float) (getHeight()/2 + getPixelDistanceBasedonTargetingPoint()) + scaledTargetingBoxImage.getHeight(),
-						(float) (getWidth()/2), 
-						getHeight()/2 + scopeRadius, 
-						paint);
+		paint.setColor(scopeColor);
+		
+		if(scopeOffset < 0) // Left
+		{
+			canvas.drawLine((float) (getWidth()/2 + scopeOffset),
+							(float) (getHeight()/2 + getPixelDistanceBasedonTargetingPoint()) + scaledTargetingBoxImage.getHeight(),
+							(float) (getWidth()/2 + scopeOffset), 
+							getHeight()/2 + scopeRadius + (scopeOffset * 0.26f), 
+							paint);
+		}
+		else // Right
+		{
+			canvas.drawLine((float) (getWidth()/2 + scopeOffset),
+					(float) (getHeight()/2 + getPixelDistanceBasedonTargetingPoint()) + scaledTargetingBoxImage.getHeight(),
+					(float) (getWidth()/2 + scopeOffset), 
+					getHeight()/2 + scopeRadius - (scopeOffset * 0.26f), 
+					paint);
+		}
 	}
 
 	private int getPixelDistanceBasedonTargetingPoint() 
@@ -269,44 +294,6 @@ public class CrosshairView extends View
 		return numPixels;
 	}
 
-	private void drawVerticalLine(Canvas canvas) 
-	{
-		Paint temporaryPaint = new Paint();
-		
-		temporaryPaint.setARGB(255, 0, 0,0);
-		temporaryPaint.setStyle(Style.STROKE);
-		temporaryPaint.setPathEffect(new DashPathEffect(new float[]{5,10,15,20}, 5));
-		
-		canvas.drawLine(centerpoint.x, getHeight()/2 - 75 , centerpoint.x, getHeight()/2 + 175, temporaryPaint);
-	}
-	
-	private void drawHorizontalLines(Canvas canvas) 
-	{
-		int count 				= 1;
-		int verticalSpacing 	= (int) ((getHeight() / 2)* .05);
-		float lineLength 		= getWidth() * .1f;
-		
-		while (count <= 5)
-		{
-			if(count == selectedRange)
-			{
-				paint.setColor(android.graphics.Color.BLUE);
-			}
-			else
-			{
-				paint.setColor(android.graphics.Color.RED);
-			}
-			
-			canvas.drawLine(centerpoint.x - lineLength + (count * 10),
-							centerpoint.y + (verticalSpacing * (count - 1)),
-							centerpoint.x + lineLength - (count * 10),
-							centerpoint.y + (verticalSpacing * (count - 1)),
-							paint);
-			
-			count++;
-		}
-	}
-
 	public void setSelectedRange(int range) 
 	{
 		switch (range)
@@ -335,5 +322,29 @@ public class CrosshairView extends View
 	public void setGoodAngle(boolean bool) 
 	{
 		goodAngle = bool;
+	}
+
+	public void resetScopeOffset()
+	{
+		scopeOffset = 0;
+	}
+
+	public void subtractPixelFromRadius(int offset) 
+	{
+		if(((getWidth()/2) + scopeOffset + offset) >= (getWidth()/4) 
+				&& ((getWidth()/2) + scopeOffset + offset) <= (getWidth() * 0.75f))
+		{
+			scopeOffset += offset;	
+		}
+	}
+	
+	public void setReticleColor(int color)
+	{
+		reticleColor = color;
+	}
+
+	public void setScopeColor(int color) 
+	{
+		scopeColor = color;
 	}
 }

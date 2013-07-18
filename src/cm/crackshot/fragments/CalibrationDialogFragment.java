@@ -1,14 +1,12 @@
 package cm.crackshot.fragments;
 
-import cm.crackshot.R;
-import cm.crackshot.activites.StartActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import cm.crackshot.R;
 
 public class CalibrationDialogFragment extends DialogFragment
 {
@@ -38,9 +36,9 @@ public class CalibrationDialogFragment extends DialogFragment
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(R.string.CalibrationDialogFragment_Header);
-		builder.setMessage(R.string.CalibrationDialogFragment_Message)
-			.setPositiveButton(R.string.CalibrationDialogFragment_Configure, new DialogInterface.OnClickListener()
+		builder.setTitle(R.string.CalibrationDialogFragment_header_text);
+		builder.setMessage(R.string.CalibrationDialogFragment_message_text)
+			.setPositiveButton(R.string.CalibrationDialogFragment_configure_text, new DialogInterface.OnClickListener()
 			{
 				@Override
 				public void onClick(DialogInterface dialog, int id) 
@@ -48,16 +46,12 @@ public class CalibrationDialogFragment extends DialogFragment
 					optionSelectedListener.onDialogOptionSelected(id);
 				}
 			})
-			.setNegativeButton(R.string.CalibrationDialogFragment_Default, new DialogInterface.OnClickListener()
+			.setNegativeButton(R.string.CalibrationDialogFragment_default_text, new DialogInterface.OnClickListener()
 			{
 				@Override
 				public void onClick(DialogInterface dialog, int id) 
 				{
 					optionSelectedListener.onDialogOptionSelected(id);
-					
-					/*// TODO Should send back center coordinates of device	
-					StartActivity startActivity = (StartActivity) getActivity();
-					startActivity.askUserToSelectCenterPointFromScreen();*/
 				}
 			});
 		

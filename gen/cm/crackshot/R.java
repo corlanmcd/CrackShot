@@ -80,23 +80,35 @@ containing a value of this type.
         public static final int nice_orange=0x7f040000;
     }
     public static final class drawable {
-        public static final int crackshottitle=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int mainmenucrack=0x7f020002;
-        public static final int targetbox=0x7f020003;
-        public static final int targetboxgreen=0x7f020004;
-        public static final int targetboxred=0x7f020005;
+        public static final int ammoselectionround=0x7f020000;
+        public static final int ammoselectionshaped=0x7f020001;
+        public static final int crackshottitle=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
+        public static final int mainmenucrack=0x7f020004;
+        public static final int rangebackground=0x7f020005;
+        public static final int targetbox=0x7f020006;
+        public static final int targetboxred=0x7f020007;
     }
     public static final class id {
         public static final int AboutActivity_backButton=0x7f080000;
         public static final int FrameLayout1=0x7f08000f;
-        public static final int MainMenuActivity_aboutButton=0x7f080004;
-        public static final int MainMenuActivity_optionsButton=0x7f080003;
+        public static final int MainMenuActivity_aboutButton=0x7f080003;
+        public static final int MainMenuActivity_optionsButton=0x7f080004;
         public static final int MainMenuActivity_startButton=0x7f080002;
         public static final int OptionsActivity_backButton=0x7f08000e;
         public static final int OptionsActivity_measurement_text=0x7f080007;
         public static final int OptionsActivity_meters_radiobox=0x7f080008;
+        public static final int OptionsActivity_reticle_color_spinner=0x7f08000b;
+        public static final int OptionsActivity_reticle_color_text=0x7f08000a;
+        public static final int OptionsActivity_scope_color_spinner=0x7f08000d;
+        public static final int OptionsActivity_scope_color_text=0x7f08000c;
         public static final int OptionsActivity_yards_radiobox=0x7f080009;
+        public static final int ScopeActivity_decrease_brightness_button=0x7f080019;
+        public static final int ScopeActivity_increase_brightness_button=0x7f08001a;
+        public static final int ScopeActivity_windage_center_button=0x7f080018;
+        public static final int StartActivity_WindageLeftButton=0x7f080015;
+        public static final int StartActivity_WindageRightButton=0x7f080016;
+        public static final int StartActivity_WindageSet=0x7f080017;
         public static final int TableLayout1=0x7f080006;
         public static final int ammoSelectionButton=0x7f080014;
         public static final int camera_layout=0x7f080010;
@@ -104,19 +116,15 @@ containing a value of this type.
         public static final int gyroangle=0x7f080012;
         public static final int imageView1=0x7f080005;
         public static final int imageView2=0x7f080001;
-        public static final int menu_settings=0x7f080016;
+        public static final int menu_settings=0x7f08001c;
         public static final int selectedRange=0x7f080013;
-        public static final int spinner1=0x7f08000d;
-        public static final int spinner2=0x7f08000b;
-        public static final int targetingBoxView=0x7f080015;
-        public static final int textView2=0x7f08000c;
-        public static final int textView3=0x7f08000a;
+        public static final int targetingBoxView=0x7f08001b;
     }
     public static final class layout {
         public static final int activity_about=0x7f030000;
         public static final int activity_main_menu=0x7f030001;
         public static final int activity_options=0x7f030002;
-        public static final int activity_start=0x7f030003;
+        public static final int activity_scope=0x7f030003;
         public static final int view_camera_scope=0x7f030004;
         public static final int view_crosshair=0x7f030005;
     }
@@ -127,26 +135,30 @@ containing a value of this type.
         public static final int activity_start=0x7f070003;
     }
     public static final class string {
-        public static final int CalibrationDialogFragment_Configure=0x7f050011;
-        public static final int CalibrationDialogFragment_Default=0x7f050013;
-        public static final int CalibrationDialogFragment_Header=0x7f050010;
-        public static final int CalibrationDialogFragment_Message=0x7f050012;
-        public static final int OptionsActivity_backButtonText=0x7f050009;
-        public static final int OptionsActivity_measurementSystemText=0x7f05000a;
-        public static final int OptionsActivity_metersText=0x7f05000d;
-        public static final int OptionsActivity_reticleColorText=0x7f05000b;
-        public static final int OptionsActivity_targetBoxColorText=0x7f05000c;
-        public static final int OptionsActivity_yardsText=0x7f05000e;
-        public static final int StartActivity_ammoSelectionButtonText=0x7f050016;
-        public static final int StartActivity_selectedRange=0x7f050015;
-        public static final int aboutMainActivityButtonText=0x7f050004;
+        public static final int AboutActivity_back_button_text=0x7f050007;
+        public static final int CalibrationDialogFragment_configure_text=0x7f050011;
+        public static final int CalibrationDialogFragment_default_text=0x7f050013;
+        public static final int CalibrationDialogFragment_header_text=0x7f050010;
+        public static final int CalibrationDialogFragment_message_text=0x7f050012;
+        public static final int MainMenuActivity_about_button_text=0x7f050004;
+        public static final int MainMenuActivity_options_button_text=0x7f050003;
+        public static final int MainMenuActivity_start_button_text=0x7f050002;
+        public static final int OptionsActivity_back_button_text=0x7f050009;
+        public static final int OptionsActivity_measurement_system_text=0x7f05000a;
+        public static final int OptionsActivity_meters_text=0x7f05000d;
+        public static final int OptionsActivity_reticle_color_text=0x7f05000b;
+        public static final int OptionsActivity_scope_color_text=0x7f05000c;
+        public static final int OptionsActivity_yards_text=0x7f05000e;
+        public static final int ScopeActivity_ammo_selection_button_text=0x7f050016;
+        public static final int ScopeActivity_center_button_text=0x7f05001a;
+        public static final int ScopeActivity_gyro_angle_text=0x7f050014;
+        public static final int ScopeActivity_selected_range_text=0x7f050015;
+        public static final int ScopeActivity_windage_left_text=0x7f050017;
+        public static final int ScopeActivity_windage_right_text=0x7f050018;
+        public static final int ScopeActivity_windage_set_text=0x7f050019;
         public static final int app_name=0x7f050000;
-        public static final int backAboutActivityButtonText=0x7f050007;
-        public static final int gyroAngle=0x7f050014;
         public static final int hello_world=0x7f050006;
         public static final int menu_settings=0x7f050001;
-        public static final int optionsMainActivityButtonText=0x7f050003;
-        public static final int startMainActivityButtonText=0x7f050002;
         public static final int title_activity_about=0x7f050005;
         public static final int title_activity_options=0x7f050008;
         public static final int title_activity_start=0x7f05000f;

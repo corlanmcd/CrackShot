@@ -1,6 +1,7 @@
 package cm.crackshot.views;
 
 import java.io.IOException;
+
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
@@ -11,7 +12,8 @@ public class CameraScopeView extends SurfaceView implements SurfaceHolder.Callba
     private SurfaceHolder mHolder;
     private Camera mCamera;
 
-    public CameraScopeView(Context context, Camera camera) {
+    @SuppressWarnings("deprecation")
+	public CameraScopeView(Context context, Camera camera) {
         super(context);
         mCamera = camera;
         this.isInEditMode();
@@ -26,7 +28,8 @@ public class CameraScopeView extends SurfaceView implements SurfaceHolder.Callba
 
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, now tell the camera where to draw the preview.
-        try {
+        try 
+        {
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();
         } catch (IOException e) {

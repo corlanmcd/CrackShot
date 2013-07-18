@@ -1,0 +1,97 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/FrameLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StartActivity" >
+
+    <FrameLayout
+        android:id="@+id/camera_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+    </FrameLayout>
+
+    <cm.crackshot.views.CrosshairView
+        android:id="@+id/crosshairView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/gyroangle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:text="@string/ScopeActivity_gyro_angle_text" />
+
+    <TextView
+        android:id="@+id/selectedRange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:background="@drawable/rangebackground"
+        android:text="@string/ScopeActivity_selected_range_text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/ammoSelectionButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:background="@drawable/ammoselectionround" />
+
+    <Button
+        android:id="@+id/StartActivity_WindageLeftButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center"
+        android:text="@string/ScopeActivity_windage_left_text"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/StartActivity_WindageRightButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center"
+        android:text="@string/ScopeActivity_windage_right_text"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/StartActivity_WindageSet"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:text="@string/ScopeActivity_windage_set_text"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/ScopeActivity_windage_center_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:text="@string/ScopeActivity_center_button_text"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/ScopeActivity_decrease_brightness_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:text="Decrease" />
+
+    <Button
+        android:id="@+id/ScopeActivity_increase_brightness_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:text="Increase" />
+
+</FrameLayout>

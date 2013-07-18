@@ -1,26 +1,19 @@
 package cm.crackshot.activites;
 
-import cm.crackshot.R;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import cm.crackshot.R;
 
 public class MainMenuActivity extends Activity implements OnClickListener
 {
-	private boolean firstTimeRunningApp = true;
 	private boolean hasCamera = false;
 	private boolean hasGyroscope = false;
-	
-	private SharedPreferences sharedPref;
-	private SharedPreferences.Editor editor;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -29,24 +22,10 @@ public class MainMenuActivity extends Activity implements OnClickListener
 		setContentView(R.layout.activity_main_menu);
 		
 		registerViewListeners();
-		//checkIfFirstTime();
 		checkCameraGyroscopeAvailabililty();
 		checkCameraAvailability();
 	}
 	
-	@Override
-	protected void onStop()
-	{
-		super.onStop();
-		
-		firstTimeRunningApp = false;
-		
-		sharedPref = getPreferences(Context.MODE_PRIVATE);
-		editor = sharedPref.edit();
-		editor.putBoolean("firstTime", firstTimeRunningApp);
-		editor.commit();
-	}
-
 	private void checkCameraGyroscopeAvailabililty() 
 	{
 		checkCameraAvailability();
@@ -90,7 +69,7 @@ public class MainMenuActivity extends Activity implements OnClickListener
 		{
 			startOptionsActivityFromIntent();
 		}
-		else
+		else if (view.getId() == R.id.MainMenuActivity_aboutButton)
 		{
 			startAboutActivityFromIntent();
 		}
@@ -98,24 +77,47 @@ public class MainMenuActivity extends Activity implements OnClickListener
 
 	private void startScopeActvityFromIntent() 
 	{
-		Intent scopeIntent = new Intent(this, StartActivity.class);
+		Intent scopeIntent = new Intent(this, ScopeActivity.class);
 		
-		scopeIntent.putExtra("firstTimeRunningApp", firstTimeRunningApp);
 		scopeIntent.putExtra("hasCamera", hasCamera);
 		scopeIntent.putExtra("hasGyroscope", hasGyroscope);
 		
+		if(getIntent().getExtras() != null)
+		{
+			if(getIntent().getExtras().containsKey("measurementSystem"))
+			{
+				scopeIntent.putExtra("measurementSystem", getIntent().getExtras().getChar("measurementSystem"));
+			}
+			
+			if(getIntent().getExtras().containsKey("reticleColor"))
+			{
+				scopeIntent.putExtra("reticleColor", getIntent().getExtras().getInt("reticleColor"));
+			}
+			
+			if(getIntent().getExtras().containsKey("scopeColor"))
+			{
+				scopeIntent.putExtra("scopeColor", getIntent().getExtras().getInt("scopeColor"));
+			}
+		}
+		
 		startActivity(scopeIntent);
+		
+		finish();
 	}
 	
 	private void startOptionsActivityFromIntent() 
 	{
 		Intent optionsIntent = new Intent(this, OptionsActivity.class);
 		startActivity(optionsIntent);
+		
+		finish();
 	}
 	
 	private void startAboutActivityFromIntent() 
 	{
-		Intent aboutIntent = new Intent(this, AboutActivity.class);
+		Intent aboutIntent = new Intent(this, AboutActivity.class);		
 		startActivity(aboutIntent);
+		
+		finish();
 	}
 }

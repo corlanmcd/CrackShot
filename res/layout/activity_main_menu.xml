@@ -19,16 +19,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="150dp"
-        android:text="@string/startMainActivityButtonText" />
-
-    <Button
-        android:id="@+id/MainMenuActivity_optionsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/MainMenuActivity_startButton"
-        android:layout_alignTop="@+id/MainMenuActivity_startButton"
-        android:layout_marginTop="65dp"
-        android:text="@string/optionsMainActivityButtonText" />
+        android:text="@string/MainMenuActivity_start_button_text" />
 
     <Button
         android:id="@+id/MainMenuActivity_aboutButton"
@@ -37,7 +28,7 @@
         android:layout_below="@+id/MainMenuActivity_optionsButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
-        android:text="@string/aboutMainActivityButtonText" />
+        android:text="@string/MainMenuActivity_about_button_text" />
 
     <ImageView
         android:id="@+id/imageView1"
@@ -48,5 +39,14 @@
         android:layout_marginTop="75dp"
         android:contentDescription="@string/hello_world"
         android:src="@drawable/crackshottitle" />
+
+    <Button
+        android:id="@+id/MainMenuActivity_optionsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/MainMenuActivity_startButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="67dp"
+        android:text="@string/MainMenuActivity_options_button_text" />
 
 </RelativeLayout>

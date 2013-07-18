@@ -4,6 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"
+    android:background="@color/nice_orange"
     tools:context=".OptionsActivity" >
 
     <TextView
@@ -11,41 +12,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="@string/OptionsActivity_measurementSystemText" />
+        android:text="@string/OptionsActivity_measurement_system_text"
+        android:textColor="#000000" />
 
     <RadioButton
         android:id="@+id/OptionsActivity_meters_radiobox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/OptionsActivity_metersText" />
+        android:text="@string/OptionsActivity_meters_text" />
 
     <RadioButton
         android:id="@+id/OptionsActivity_yards_radiobox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="@string/OptionsActivity_yardsText" />
+        android:checked="true"
+        android:text="@string/OptionsActivity_yards_text" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/OptionsActivity_reticle_color_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/OptionsActivity_reticleColorText" />
+        android:text="@string/OptionsActivity_reticle_color_text"
+        android:textColor="#000000" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/OptionsActivity_reticle_color_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/OptionsActivity_scope_color_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="69dp"
-        android:text="@string/OptionsActivity_targetBoxColorText" />
+        android:text="@string/OptionsActivity_scope_color_text"
+        android:textColor="#000000" />
 
     <Spinner
-        android:id="@+id/spinner1"
+        android:id="@+id/OptionsActivity_scope_color_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="19dp" />
@@ -54,6 +59,6 @@
         android:id="@+id/OptionsActivity_backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/OptionsActivity_backButtonText" />
+        android:text="@string/OptionsActivity_back_button_text" />
 
 </TableLayout>
