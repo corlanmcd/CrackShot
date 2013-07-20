@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <cm.crackshot.views.CrosshairView
-        android:id="@id/crosshairView"
+        android:id="@id/ScopeActivity_crosshair_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#ccc"

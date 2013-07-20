@@ -46,9 +46,9 @@ public class MainMenuActivity extends Activity implements OnClickListener
 
 	private void registerViewListeners() 
 	{
-		((Button) findViewById(R.id.MainMenuActivity_startButton)).setOnClickListener(this);
-		((Button) findViewById(R.id.MainMenuActivity_optionsButton)).setOnClickListener(this);
-		((Button) findViewById(R.id.MainMenuActivity_aboutButton)).setOnClickListener(this);
+		((Button) findViewById(R.id.MainMenuActivity_start_button)).setOnClickListener(this);
+		((Button) findViewById(R.id.MainMenuActivity_options_button)).setOnClickListener(this);
+		((Button) findViewById(R.id.MainMenuActivity_about_button)).setOnClickListener(this);
 	}
 
 	@Override
@@ -61,15 +61,15 @@ public class MainMenuActivity extends Activity implements OnClickListener
 	@Override
 	public void onClick(View view) 
 	{
-		if (view.getId() == R.id.MainMenuActivity_startButton)
+		if (view.getId() == R.id.MainMenuActivity_start_button)
 		{
 			startScopeActvityFromIntent();
 		}
-		else if (view.getId() == R.id.MainMenuActivity_optionsButton)
+		else if (view.getId() == R.id.MainMenuActivity_options_button)
 		{
 			startOptionsActivityFromIntent();
 		}
-		else if (view.getId() == R.id.MainMenuActivity_aboutButton)
+		else if (view.getId() == R.id.MainMenuActivity_about_button)
 		{
 			startAboutActivityFromIntent();
 		}

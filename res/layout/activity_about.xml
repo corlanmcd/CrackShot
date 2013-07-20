@@ -14,4 +14,15 @@
         android:layout_marginBottom="42dp"
         android:text="@string/AboutActivity_back_button_text" />
 
+    <TextView
+        android:id="@+id/AboutActivity_thank_you_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="138dp"
+        android:gravity="center_horizontal|center"
+        android:text="@string/AboutActivity_thank_you_message_text"
+        android:textColor="#000000" />
+
 </RelativeLayout>

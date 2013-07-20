@@ -3,6 +3,7 @@ package cm.crackshot.activites;
 import java.util.List;
 import java.util.Timer;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Point;
 import android.hardware.Camera;
@@ -44,7 +45,6 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	private boolean hasCamera;
 	private boolean hasGyroscope;
 	private char	measurementSystem;
-	private int		currentExposure;
 	private int		minExposure;
 	private int		maxExposure;
 	private int		reticleColor;
@@ -54,8 +54,8 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	
 	private Ballistics 				ballistics;
 	private Button					ammoSelectionButton;
-	private Button					brightnessDecreaseButton;
-	private Button					brightnessIncreaseButton;
+	private Button					exposureDecreaseButton;
+	private Button					exposureIncreaseButton;
 	private Button					windageCenterButton;
 	private Button					windageLeftButton;
 	private Button					windageRightButton;
@@ -72,6 +72,7 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	private SensorManager 			sensorManager;
 	private Timer 					fuseTimer;
 	private TextView 				angleView;
+	private TextView				goalAngleView;
 	private TextView 				selectedRangeView;
 	
 	@Override
@@ -107,16 +108,17 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	
 	private void findViews()
 	{
-		ammoSelectionButton 		= (Button)findViewById(R.id.ammoSelectionButton);		
-		brightnessDecreaseButton 	= (Button)findViewById(R.id.ScopeActivity_decrease_brightness_button);
-		brightnessIncreaseButton 	= (Button)findViewById(R.id.ScopeActivity_increase_brightness_button);
-		windageLeftButton			= (Button)findViewById(R.id.StartActivity_WindageLeftButton);
-		windageRightButton			= (Button)findViewById(R.id.StartActivity_WindageRightButton);
-		windageSetButton			= (Button)findViewById(R.id.StartActivity_WindageSet);
+		ammoSelectionButton 		= (Button)findViewById(R.id.ScopeActivity_ammo_selection_button);		
+		exposureDecreaseButton 		= (Button)findViewById(R.id.ScopeActivity_decrease_brightness_button);
+		exposureIncreaseButton 		= (Button)findViewById(R.id.ScopeActivity_increase_brightness_button);
+		windageLeftButton			= (Button)findViewById(R.id.ScopeActivity_windage_left_button);
+		windageRightButton			= (Button)findViewById(R.id.ScopeActivity_windage_right_button);
+		windageSetButton			= (Button)findViewById(R.id.ScopeActivity_windage_set_button);
 		windageCenterButton 		= (Button)findViewById(R.id.ScopeActivity_windage_center_button);
-		angleView 					= (TextView)findViewById(R.id.gyroangle);
-		selectedRangeView 			= (TextView)findViewById(R.id.selectedRange);
-		crosshairView 				= (CrosshairView)findViewById(R.id.crosshairView);
+		angleView 					= (TextView)findViewById(R.id.ScopeActivity_gyro_angle_text_view);
+		goalAngleView				= (TextView)findViewById(R.id.ScopeActivity_gyro_angle_goal_text_view);
+		selectedRangeView 			= (TextView)findViewById(R.id.ScopeActivity_selected_range_text_view);
+		crosshairView 				= (CrosshairView)findViewById(R.id.ScopeActivity_crosshair_view);
 	}
 	
 	private void setListeners()
@@ -141,29 +143,25 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 		
 		windageCenterButton.setOnClickListener(this);
 		
-		brightnessDecreaseButton.setOnTouchListener(new RepeatListener(400, 100, new OnClickListener() {
+		exposureDecreaseButton.setOnTouchListener(new RepeatListener(400, 100, new OnClickListener() {
 			@Override
 			public void onClick(View view) 
 			{
-				if((currentExposure - 1) >= minExposure)
+				if((params.getExposureCompensation() - 1) >= minExposure)
 				{
-					params.setExposureCompensation(currentExposure - 1);
+					params.setExposureCompensation(params.getExposureCompensation() - 1);
 					mCamera.setParameters(params);
-
-					currentExposure--;
 				}
 			}
 		}));
 		
-		brightnessIncreaseButton.setOnTouchListener(new RepeatListener(400, 100, new OnClickListener() {
+		exposureIncreaseButton.setOnTouchListener(new RepeatListener(400, 100, new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if((currentExposure + 1) <= maxExposure)
+				if((params.getExposureCompensation() + 1) <= maxExposure)
 				{
-					params.setExposureCompensation(currentExposure + 1);
+					params.setExposureCompensation(params.getExposureCompensation() + 1);
 					mCamera.setParameters(params);
-
-					currentExposure++;
 				}
 			}
 		}));
@@ -328,7 +326,7 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	{
 		crosshairView.setCenterPoint(centerpoint);
 		crosshairView.setSelectedRange(selectedRange);
-		crosshairView.setRotation(angleManager.getPitchAngle());
+		crosshairView.setRotationValue(angleManager.getPitchAngle());
 		crosshairView.setVisibility(View.VISIBLE);
 	}
 			
@@ -416,7 +414,11 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	{
 		if(id == -1) // Dialog "Positive" Button Selected - "Configure"
 		{
-			Log.e("CALLBACK", "Configure Callback Works");
+			//Disable Exposure Buttons temporarily
+			exposureDecreaseButton.setVisibility(View.GONE);
+			exposureIncreaseButton.setVisibility(View.GONE);
+			
+			//Enable Windage Buttons
 			windageCenterButton	.setVisibility(View.VISIBLE);
 			windageCenterButton	.setEnabled(true);
 			windageLeftButton	.setVisibility(View.VISIBLE);
@@ -482,24 +484,41 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	
 	private void updateCrosshairAngle()
 	{
-		angleView			.setText(Float.toString(angleManager.getPitchAngle()));
-		angleView			.setTextColor(android.graphics.Color.RED);
+		angleView			.setText(Float.toString(angleManager.getPitchAngle() * -1.0f));
+		angleView			.setTextColor(android.graphics.Color.BLACK);
+		goalAngleView		.setText("Goal: " + Float.toString(ballistics.getAngleByDistance(ammoType, selectedRange)));
+		goalAngleView		.setTextColor(android.graphics.Color.BLACK);
 		selectedRangeView	.setTextColor(android.graphics.Color.BLACK);
 		crosshairView		.setSelectedRange(selectedRange);
 		crosshairView		.invalidate();
-		crosshairView		.setRotation(-(int)angleManager.getRollAngle());
+		crosshairView		.setRotationValue(-(int)angleManager.getRollAngle());
 	}
 	
 	private void updateTargetingBox()
 	{
-		// The value of the pitch angle above the horizontal is always negative (due to camera coord remap)
-		if (Math.abs(angleManager.getPitchAngle() - ballistics.getAngleByDistance(ammoType, selectedRange)) <= 1.0f)
+		if(hasGyroscope)
 		{
-			crosshairView.setGoodAngle(true);
+			// The value of the pitch angle above the horizontal is always negative (due to camera coord remap)
+			if (Math.abs((angleManager.getPitchAngle() * -1.0f) - ballistics.getAngleByDistance(ammoType, selectedRange)) <= 1.0f)
+			{
+				crosshairView.setGoodAngle(true);
+			}
+			else
+			{
+				crosshairView.setGoodAngle(false);
+			}
 		}
 		else
 		{
-			crosshairView.setGoodAngle(false);
+			// The value of the pitch angle above the horizontal is always negative (due to camera coord remap)
+			if (Math.abs((angleManager.getPitchAngle() * -1.0f) - ballistics.getAngleByDistance(ammoType, selectedRange)) <= 2.0f)
+			{
+				crosshairView.setGoodAngle(true);
+			}
+			else
+			{
+				crosshairView.setGoodAngle(false);
+			}
 		}
 	}
 
@@ -544,39 +563,52 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
  	
  	private void enableCameraFocusFeature() 
 	{
-		List<String> focusModes 	= params.getSupportedFocusModes();
+		List<String> focusModes = params.getSupportedFocusModes();
 		
 		if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) 
 		{
 			params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
 		}
 		
-		currentExposure = params.getExposureCompensation();
 		minExposure 	= params.getMinExposureCompensation();
 		maxExposure 	= params.getMaxExposureCompensation();
-		
-		params.setSceneMode(Camera.Parameters.SCENE_MODE_HDR);
-		
-		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-		{
-			if(params.isVideoStabilizationSupported())
-			{
-				params.setVideoStabilization(true);
-			}
-		}
 		
 		if(params.getMinExposureCompensation() != 0 && params.getMaxExposureCompensation() != 0)
 		{
 			params.setExposureCompensation(params.getMaxExposureCompensation());
 		}
 		
+		getVideoStabilizationIfSupported(); // API 15 required
+		getSceneModeHDRIfSupported();		// API 17 required
+		
 		mCamera.setParameters(params);
 	}
+ 	
+ 	@TargetApi(15)
+ 	private void getVideoStabilizationIfSupported()
+ 	{
+ 		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+		{
+			if(params.isVideoStabilizationSupported())
+			{
+				params.setVideoStabilization(true);
+			}
+		}
+ 	}
+ 	
+ 	@TargetApi(17)
+ 	private void getSceneModeHDRIfSupported()
+ 	{
+ 		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1)
+		{
+			params.setSceneMode(Camera.Parameters.SCENE_MODE_HDR);
+		}
+ 	}
  	
  	private void addCameraToCameraView()
 	{
 		mPreview 				= new CameraScopeView(this, mCamera);
-        FrameLayout preview 	= (FrameLayout) findViewById(R.id.camera_layout);
+        FrameLayout preview 	= (FrameLayout) findViewById(R.id.ScopeActivity_camera_layout);
         
         preview.addView(mPreview);	
 	}
@@ -596,7 +628,7 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	@Override
 	public void onClick(View view) 
 	{
-		if(view.getId() == R.id.ammoSelectionButton)
+		if(view.getId() == R.id.ScopeActivity_ammo_selection_button)
 		{
 			if(ammoType.equals("shaped"))
 			{
@@ -620,8 +652,13 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 			crosshairView.setAmmoType(ammoType);
 		}
 		
-		if(view.getId() == R.id.StartActivity_WindageSet)
+		if(view.getId() == R.id.ScopeActivity_windage_set_button)
 		{
+			//Reenable Exposure Buttons
+			exposureDecreaseButton.setVisibility(View.VISIBLE);
+			exposureIncreaseButton.setVisibility(View.VISIBLE);
+			
+			//Disable Windage Buttons			
 			windageCenterButton	.setVisibility(View.GONE);
 			windageCenterButton	.setEnabled(false);
 			windageLeftButton	.setVisibility(View.GONE);

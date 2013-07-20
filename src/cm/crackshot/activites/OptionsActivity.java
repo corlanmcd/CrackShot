@@ -32,8 +32,8 @@ public class OptionsActivity extends Activity implements OnClickListener
 		
 		measurementSystem 	= 'y'; //yards is default
 		
-		meters 				= (RadioButton)findViewById(R.id.OptionsActivity_meters_radiobox);
-		yards 				= (RadioButton)findViewById(R.id.OptionsActivity_yards_radiobox);
+		meters 				= (RadioButton)findViewById(R.id.OptionsActivity_meters_radio_button);
+		yards 				= (RadioButton)findViewById(R.id.OptionsActivity_yards_radio_button);
 		reticleColorSpinner = (Spinner)findViewById(R.id.OptionsActivity_reticle_color_spinner);
 		scopeColorSpinner 	= (Spinner)findViewById(R.id.OptionsActivity_scope_color_spinner);
 		
@@ -43,9 +43,9 @@ public class OptionsActivity extends Activity implements OnClickListener
 	
 	private void registerViewListeners() 
 	{
-		((Button) 		findViewById(R.id.OptionsActivity_backButton)).setOnClickListener(this);
-		((RadioButton)	findViewById(R.id.OptionsActivity_meters_radiobox)).setOnClickListener(this);
-		((RadioButton)	findViewById(R.id.OptionsActivity_yards_radiobox)).setOnClickListener(this);
+		((Button) 		findViewById(R.id.OptionsActivity_back_button)).setOnClickListener(this);
+		((RadioButton)	findViewById(R.id.OptionsActivity_meters_radio_button)).setOnClickListener(this);
+		((RadioButton)	findViewById(R.id.OptionsActivity_yards_radio_button)).setOnClickListener(this);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class OptionsActivity extends Activity implements OnClickListener
 	public void onClick(View view) 
 	{
 		
-		if (view.getId() == R.id.OptionsActivity_meters_radiobox)
+		if (view.getId() == R.id.OptionsActivity_meters_radio_button)
 		{			
 			if(yards.isChecked())
 			{
@@ -77,7 +77,7 @@ public class OptionsActivity extends Activity implements OnClickListener
 			
 			measurementSystem = 'm';
 		}
-		else if (view.getId() == R.id.OptionsActivity_yards_radiobox)
+		else if (view.getId() == R.id.OptionsActivity_yards_radio_button)
 		{			
 			if(meters.isChecked())
 			{
@@ -87,7 +87,7 @@ public class OptionsActivity extends Activity implements OnClickListener
 			measurementSystem = 'y';
 		}
 		
-		if (view.getId() == R.id.OptionsActivity_backButton)
+		if (view.getId() == R.id.OptionsActivity_back_button)
 		{
 			startMainMenuActivityFromIntent();
 		}
@@ -99,8 +99,8 @@ public class OptionsActivity extends Activity implements OnClickListener
 		
 		colorList.add("Blue");
 		colorList.add("Green");
-		colorList.add("Indigo");
 		colorList.add("Orange");
+		colorList.add("Purple");
 		colorList.add("Red");
 		colorList.add("Yellow");
 		
@@ -110,7 +110,7 @@ public class OptionsActivity extends Activity implements OnClickListener
 		reticleColorSpinner	.setAdapter(colorAdapter);
 		reticleColorSpinner	.setSelection(4);
 		scopeColorSpinner	.setAdapter(colorAdapter);
-		scopeColorSpinner	.setSelection(3);
+		scopeColorSpinner	.setSelection(2);
 	}
 
 	private void startMainMenuActivityFromIntent() 
@@ -130,27 +130,27 @@ public class OptionsActivity extends Activity implements OnClickListener
 		
 		if(color.equals("Blue"))
 		{
-			return 0xff0000ff;
+			return 0xff0099CC;
 		}
 		else if(color.equals("Green"))
 		{
-			return 0xff00ff00;
-		}
-		else if(color.equals("Indigo"))
-		{
-			return 0xff6600ff;
+			return 0xff669900;
 		}
 		else if(color.equals("Orange"))
 		{
 			return 0xffff8800;
 		}
+		else if(color.equals("Purple"))
+		{
+			return 0xff9933cc;
+		}
 		else if(color.equals("Red"))
 		{
-			return 0xffff0000;
+			return 0xffCC0000;
 		}
 		else if(color.equals("Yellow"))
 		{
-			return 0xffffff00;
+			return 0xffffde00;
 		}
 			
 		return 0xffff8800;
@@ -162,27 +162,27 @@ public class OptionsActivity extends Activity implements OnClickListener
 		
 		if(color.equals("Blue"))
 		{
-			return 0xff0000ff;
+			return 0xff0099CC;
 		}
 		else if(color.equals("Green"))
 		{
-			return 0xff00ff00;
-		}
-		else if(color.equals("Indigo"))
-		{
-			return 0xff6600ff;
+			return 0xff669900;
 		}
 		else if(color.equals("Orange"))
 		{
 			return 0xffff8800;
 		}
+		else if(color.equals("Purple"))
+		{
+			return 0xff9933cc;
+		}
 		else if(color.equals("Red"))
 		{
-			return 0xffff0000;
+			return 0xffCC0000;
 		}
 		else if(color.equals("Yellow"))
 		{
-			return 0xffffff00;
+			return 0xffffde00;
 		}
 			
 		return 0xffff8800;

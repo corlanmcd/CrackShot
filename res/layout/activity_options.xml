@@ -8,7 +8,7 @@
     tools:context=".OptionsActivity" >
 
     <TextView
-        android:id="@+id/OptionsActivity_measurement_text"
+        android:id="@+id/OptionsActivity_measurement_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
@@ -16,13 +16,13 @@
         android:textColor="#000000" />
 
     <RadioButton
-        android:id="@+id/OptionsActivity_meters_radiobox"
+        android:id="@+id/OptionsActivity_meters_radio_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/OptionsActivity_meters_text" />
 
     <RadioButton
-        android:id="@+id/OptionsActivity_yards_radiobox"
+        android:id="@+id/OptionsActivity_yards_radio_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
@@ -56,7 +56,7 @@
         android:layout_marginBottom="19dp" />
 
     <Button
-        android:id="@+id/OptionsActivity_backButton"
+        android:id="@+id/OptionsActivity_back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/OptionsActivity_back_button_text" />

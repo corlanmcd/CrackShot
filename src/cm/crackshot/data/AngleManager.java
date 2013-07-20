@@ -57,7 +57,7 @@ public class AngleManager
     	}
     	else
     	{
-    		return orientationValues[1];
+    		return (float)(orientationValues[1] * (180/Math.PI));
     	}
     }
     

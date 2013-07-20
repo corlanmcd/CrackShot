@@ -16,6 +16,7 @@ import cm.crackshot.R;
 public class CrosshairView extends View 
 {
 	private int 	reticleColor;
+	private float	rotationValue;
 	private int 	scopeColor;
 	private int 	scopeOffset;
 	private int 	scopeRadius;
@@ -50,6 +51,7 @@ public class CrosshairView extends View
 		goodAngle 			= false;
 		paint 				= new Paint();
 		reticleColor 		= android.graphics.Color.RED;
+		rotationValue		= 0;
 		scopeColor 			= 0xffff8800;
 		scopeOffset			= 0;
 		scopeRadius 		= (getWidth()/2) + 15;
@@ -64,11 +66,15 @@ public class CrosshairView extends View
 	{
 		this.ammoType = ammoType;
 	}
-
+	
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
+		//Rotate Canvas through canvas.rotate() (necessary for API 10)
+		canvas.rotate(rotationValue, getWidth()/2, getHeight()/2);
+		
 		super.onDraw(canvas);
+		
 		setupPaintBrush();
 		drawHUD(canvas);
 	}
@@ -346,5 +352,10 @@ public class CrosshairView extends View
 	public void setScopeColor(int color) 
 	{
 		scopeColor = color;
+	}
+	
+	public void setRotationValue(float value)
+	{
+		rotationValue = value;
 	}
 }

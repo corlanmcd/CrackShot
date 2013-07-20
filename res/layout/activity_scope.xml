@@ -6,27 +6,37 @@
     tools:context=".StartActivity" >
 
     <FrameLayout
-        android:id="@+id/camera_layout"
+        android:id="@+id/ScopeActivity_camera_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
     </FrameLayout>
 
     <cm.crackshot.views.CrosshairView
-        android:id="@+id/crosshairView"
+        android:id="@+id/ScopeActivity_crosshair_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="invisible" />
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|center"
+        android:background="@color/nice_orange"
+        android:contentDescription="@string/hello_world"
+        android:src="@drawable/rangebackground" />
+
     <TextView
-        android:id="@+id/gyroangle"
+        android:id="@+id/ScopeActivity_gyro_angle_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
+        android:paddingBottom="20dp"
         android:text="@string/ScopeActivity_gyro_angle_text" />
 
     <TextView
-        android:id="@+id/selectedRange"
+        android:id="@+id/ScopeActivity_selected_range_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|right"
@@ -35,7 +45,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
-        android:id="@+id/ammoSelectionButton"
+        android:id="@+id/ScopeActivity_ammo_selection_button"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,29 +53,30 @@
         android:background="@drawable/ammoselectionround" />
 
     <Button
-        android:id="@+id/StartActivity_WindageLeftButton"
+        android:id="@+id/ScopeActivity_windage_left_button"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|center"
-        android:text="@string/ScopeActivity_windage_left_text"
+        android:background="@drawable/windage_left"
         android:visibility="gone" />
 
     <Button
-        android:id="@+id/StartActivity_WindageRightButton"
+        android:id="@+id/ScopeActivity_windage_right_button"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|center"
-        android:text="@string/ScopeActivity_windage_right_text"
+        android:background="@drawable/windage_right"
         android:visibility="gone" />
 
     <Button
-        android:id="@+id/StartActivity_WindageSet"
+        android:id="@+id/ScopeActivity_windage_set_button"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
+        android:layout_gravity="bottom|left"
+        android:background="@android:drawable/btn_default"
         android:text="@string/ScopeActivity_windage_set_text"
         android:visibility="gone" />
 
@@ -75,6 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
+        android:background="@android:drawable/btn_default"
         android:text="@string/ScopeActivity_center_button_text"
         android:visibility="gone" />
 
@@ -84,7 +96,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|left"
-        android:text="Decrease" />
+        android:background="@drawable/exposure_decrease" />
 
     <Button
         android:id="@+id/ScopeActivity_increase_brightness_button"
@@ -92,6 +104,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:text="Increase" />
+        android:background="@drawable/exposure_increase" />
+
+    <TextView
+        android:id="@+id/ScopeActivity_gyro_angle_goal_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:text="@string/ScopeActivity_gyro_angle_text" />
 
 </FrameLayout>

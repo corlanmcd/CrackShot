@@ -24,9 +24,8 @@
     <string name="ScopeActivity_gyro_angle_text">0</string>
     <string name="ScopeActivity_selected_range_text">25 yd</string>
     <string name="ScopeActivity_ammo_selection_button_text">ROUND</string>
-    <string name="ScopeActivity_windage_left_text">&lt;</string>
-    <string name="ScopeActivity_windage_right_text">&gt;</string>
     <string name="ScopeActivity_windage_set_text">Set</string>
     <string name="ScopeActivity_center_button_text">Center</string>
+    <string name="AboutActivity_thank_you_message_text">This program is created by Corlan M. in 2013. \n\n I\'d like to personally thank Anton G. for being my target dummy ( :P ), which helped me calibrate the screen location of the targeting box at the different angles.</string>
 
 </resources>
