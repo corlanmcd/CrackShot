@@ -84,14 +84,16 @@ containing a value of this type.
         public static final int ammoselectionshaped=0x7f020001;
         public static final int crackshottitle=0x7f020002;
         public static final int exposure_decrease=0x7f020003;
-        public static final int exposure_increase=0x7f020004;
-        public static final int ic_launcher=0x7f020005;
-        public static final int mainmenucrack=0x7f020006;
-        public static final int rangebackground=0x7f020007;
-        public static final int targetbox=0x7f020008;
-        public static final int targetboxred=0x7f020009;
-        public static final int windage_left=0x7f02000a;
-        public static final int windage_right=0x7f02000b;
+        public static final int exposure_decrease_disabled=0x7f020004;
+        public static final int exposure_increase=0x7f020005;
+        public static final int exposure_increase_disabled=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int mainmenucrack=0x7f020008;
+        public static final int rangebackground=0x7f020009;
+        public static final int targetbox=0x7f02000a;
+        public static final int targetboxred=0x7f02000b;
+        public static final int windage_left=0x7f02000c;
+        public static final int windage_right=0x7f02000d;
     }
     public static final class id {
         public static final int AboutActivity_backButton=0x7f080000;

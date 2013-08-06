@@ -4,7 +4,6 @@ import java.util.TimerTask;
 
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 public class AngleManager 
 {

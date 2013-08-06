@@ -5,6 +5,7 @@ import java.util.Timer;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Sensor;
@@ -14,6 +15,7 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
@@ -52,6 +54,7 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	private int 	selectedRange;
 	private String	ammoType;
 	
+	private AngleManager 			angleManager;
 	private Ballistics 				ballistics;
 	private Button					ammoSelectionButton;
 	private Button					exposureDecreaseButton;
@@ -61,19 +64,19 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	private Button					windageRightButton;
 	private Button					windageSetButton;
 	private Camera 					mCamera;
+    private Camera.Parameters 		params;
 	private CameraInstanceTask 		cameraInstanceTask;
     private CameraScopeView 		mPreview;
-    private Camera.Parameters 		params;
     private CrosshairView 			crosshairView;
 	private DisplayMetrics 			metrics;	
 	private Handler 				handler;
 	private Point 					centerpoint;
-	private AngleManager 			angleManager;
 	private SensorManager 			sensorManager;
-	private Timer 					fuseTimer;
+	private SharedPreferences		sharedPrefs;
 	private TextView 				angleView;
 	private TextView				goalAngleView;
 	private TextView 				selectedRangeView;
+	private Timer 					fuseTimer;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -84,10 +87,13 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 		setContentView		(R.layout.activity_scope);
 		
 		sensorManager 		= (SensorManager) getSystemService(SENSOR_SERVICE);
-		measurementSystem	= getIntent().getExtras().getChar("measurementSystem");
-		reticleColor		= getIntent().getExtras().getInt("reticleColor");
-		scopeColor			= getIntent().getExtras().getInt("scopeColor");
 		
+		sharedPrefs 		= PreferenceManager.getDefaultSharedPreferences(this);
+		
+		measurementSystem	= (char)sharedPrefs.getInt("measurementSystem", Character.valueOf('y'));
+		reticleColor		= sharedPrefs.getInt("reticleColor", android.graphics.Color.RED);
+		scopeColor			= sharedPrefs.getInt("scopeColor", 0xffff8800);
+				
 		hasCamera 			= false;
 		hasGyroscope		= false;
 		selectedRange 		= 25;
@@ -101,24 +107,22 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 		findViews();
 		setSelectedRangeViewText();
 		setListeners();
-			
-		
 		initializeCameraSensorsAndHUD();
 	}
 	
 	private void findViews()
 	{
-		ammoSelectionButton 		= (Button)findViewById(R.id.ScopeActivity_ammo_selection_button);		
-		exposureDecreaseButton 		= (Button)findViewById(R.id.ScopeActivity_decrease_brightness_button);
-		exposureIncreaseButton 		= (Button)findViewById(R.id.ScopeActivity_increase_brightness_button);
-		windageLeftButton			= (Button)findViewById(R.id.ScopeActivity_windage_left_button);
-		windageRightButton			= (Button)findViewById(R.id.ScopeActivity_windage_right_button);
-		windageSetButton			= (Button)findViewById(R.id.ScopeActivity_windage_set_button);
-		windageCenterButton 		= (Button)findViewById(R.id.ScopeActivity_windage_center_button);
-		angleView 					= (TextView)findViewById(R.id.ScopeActivity_gyro_angle_text_view);
-		goalAngleView				= (TextView)findViewById(R.id.ScopeActivity_gyro_angle_goal_text_view);
-		selectedRangeView 			= (TextView)findViewById(R.id.ScopeActivity_selected_range_text_view);
-		crosshairView 				= (CrosshairView)findViewById(R.id.ScopeActivity_crosshair_view);
+		ammoSelectionButton 	= (Button)findViewById(R.id.ScopeActivity_ammo_selection_button);		
+		exposureDecreaseButton 	= (Button)findViewById(R.id.ScopeActivity_decrease_brightness_button);
+		exposureIncreaseButton 	= (Button)findViewById(R.id.ScopeActivity_increase_brightness_button);
+		windageLeftButton		= (Button)findViewById(R.id.ScopeActivity_windage_left_button);
+		windageRightButton		= (Button)findViewById(R.id.ScopeActivity_windage_right_button);
+		windageSetButton		= (Button)findViewById(R.id.ScopeActivity_windage_set_button);
+		windageCenterButton 	= (Button)findViewById(R.id.ScopeActivity_windage_center_button);
+		crosshairView 			= (CrosshairView)findViewById(R.id.ScopeActivity_crosshair_view);
+		angleView 				= (TextView)findViewById(R.id.ScopeActivity_gyro_angle_text_view);
+		goalAngleView			= (TextView)findViewById(R.id.ScopeActivity_gyro_angle_goal_text_view);
+		selectedRangeView 		= (TextView)findViewById(R.id.ScopeActivity_selected_range_text_view);
 	}
 	
 	private void setListeners()
@@ -199,7 +203,7 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
     	super.onStop();
     	
     	releaseCamera();
-        
+    	
     	if(sensorManager != null)
     	{
     		sensorManager.unregisterListener(this);
@@ -211,9 +215,14 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
     protected void onPause() 
     {
         super.onPause();
+        
         releaseCamera();
-        sensorManager.unregisterListener(this);
-        sensorManager = null;
+        
+        if(sensorManager != null)
+        {
+        	sensorManager.unregisterListener(this);
+        	sensorManager = null;
+        }
     }
     
     @Override
@@ -226,12 +235,7 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
     }
 
     private void initializeCameraSensorsAndHUD() 
-	{
-		if(reticleColor == 0)
-			reticleColor 	= android.graphics.Color.RED;
-		if(scopeColor == 0)
-			scopeColor 		= 0xffff8800;
-    	
+	{	
     	if(hasCameraAndGyrscopeAvailability())
 		{
 			initializeAngleManagerAndFuseTimer();
@@ -404,7 +408,7 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 
 	private void setCenterPointDefault() 
 	{
-		centerpoint 		= new Point(metrics.widthPixels/2, metrics.heightPixels/2);
+		centerpoint = new Point(metrics.widthPixels/2, metrics.heightPixels/2);
 		
 		drawHUD();
 	}
@@ -434,7 +438,6 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 		}
 		if (id == -2) // Dialog "Negative" Button Selected - "Default"
 		{
-			Log.e("CALLBACK", "Default Callback Works");
 			setCenterPointDefault();
 		}
 	}
@@ -479,6 +482,7 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 		{
 			updateCrosshairAngle();
 			updateTargetingBox();
+			updateExposureButtons();
 		}
 	};
 	
@@ -522,6 +526,31 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 		}
 	}
 
+	@SuppressWarnings("deprecation")
+	private void updateExposureButtons()
+	{
+		if(params != null)
+		{
+			if(params.getExposureCompensation() == minExposure)
+			{
+				exposureDecreaseButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.exposure_decrease_disabled));
+			}
+			else
+			{
+				exposureDecreaseButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.exposure_decrease));
+			}
+			
+			if(params.getExposureCompensation() == maxExposure)
+			{
+				exposureIncreaseButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.exposure_increase_disabled));
+			}
+			else
+			{
+				exposureIncreaseButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.exposure_increase));
+			}
+		}
+	}
+	
  	@Override
  	public boolean onTouch(View v, MotionEvent event) 
  	{
@@ -552,16 +581,16 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
  	     {
  	    	mCamera = c;
  	    	mCamera.setDisplayOrientation(90);
-			mCamera.startPreview();
+ 	    	mCamera.startPreview();
 			
 			params 	= mCamera.getParameters();
 			
-			enableCameraFocusFeature();
+			enableCameraFeatures();
 			addCameraToCameraView();
  	     }
  	 }
  	
- 	private void enableCameraFocusFeature() 
+ 	private void enableCameraFeatures() 
 	{
 		List<String> focusModes = params.getSupportedFocusModes();
 		
@@ -578,13 +607,16 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 			params.setExposureCompensation(params.getMaxExposureCompensation());
 		}
 		
+		params.set("orientation", "portrait");
+		params.set("rotation", 90);
+		
 		getVideoStabilizationIfSupported(); // API 15 required
 		getSceneModeHDRIfSupported();		// API 17 required
 		
 		mCamera.setParameters(params);
 	}
  	
- 	@TargetApi(15)
+ 	@TargetApi(15) //Supported in ICS_MR1+
  	private void getVideoStabilizationIfSupported()
  	{
  		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
@@ -596,7 +628,7 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 		}
  	}
  	
- 	@TargetApi(17)
+ 	@TargetApi(17) //Supported in JB_MR1+
  	private void getSceneModeHDRIfSupported()
  	{
  		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -607,7 +639,7 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
  	
  	private void addCameraToCameraView()
 	{
-		mPreview 				= new CameraScopeView(this, mCamera);
+ 		mPreview 				= new CameraScopeView(this, mCamera);
         FrameLayout preview 	= (FrameLayout) findViewById(R.id.ScopeActivity_camera_layout);
         
         preview.addView(mPreview);	
@@ -617,7 +649,6 @@ public class ScopeActivity extends FragmentActivity implements SensorEventListen
 	{
 		if (mCamera != null)
 		{
-            //mCamera.setPreviewCallback(null);
             mPreview.getHolder().removeCallback(mPreview);
 			mCamera.release();        // release the camera for other applications
             mCamera = null;

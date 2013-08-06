@@ -1,3 +1,34 @@
+/************************************************************************************
+ * Author: 		Corlan McDonald
+ * Date:		February - July 2013
+ * Program:		Crack.Shot
+ * Version:		1.0 
+ * Description:	Crack.Shot is an Android application that serves as a digital 
+ * 				scope for Paintball. It provides targeting guidance based on the 
+ * 				selected distance between the user and the target, and will then 
+ * 				provide a targeting box calibrated for that distance while also
+ * 				recommending the angle at which the paintball gun should be held.
+ * 				Crack.Shot also provides a few other nifty features, such as the 
+ * 				ability to switch between ammunition types (rounded & shaped),
+ * 				scope zeroing, scope customization, and dynamic orientation of the
+ * 				scope/reticle.
+ * 
+ * 				Currently, I'm only sure that Crack.Shot works on Android 4.0+ 
+ * 				devices. I had very limited, somewhat successful testing with 2.2+
+ * 				devices, but then my friend who owned the 2.2 device lost his
+ * 				phone... otherwise, pending unusual camera orientations, it should
+ * 				work.
+ * 
+ * 				Additionally, comments are quite limited, in attempt to write 
+ * 				"self-documenting" code in the way of method naming schemes, 
+ * 				constant refactoring, and limited many functions to their named
+ * 				purposes (although this idea went to the wind as deadlines came up).
+ * 				So hopefully, with the exception of a few strings of spaghetti code,
+ * 				it is readable without the need for comments. In the future,
+ * 				with continued improvement, the architecture of Crack.Shot
+ * 				will be cleaned up.
+ ************************************************************************************/
+
 package cm.crackshot.activites;
 
 import android.app.Activity;

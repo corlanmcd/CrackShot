@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class CameraScopeView extends SurfaceView implements SurfaceHolder.Callback {
+public class CameraScopeView extends SurfaceView implements SurfaceHolder.Callback 
+{
     private SurfaceHolder mHolder;
     private Camera mCamera;
 
     @SuppressWarnings("deprecation")
-	public CameraScopeView(Context context, Camera camera) {
+	public CameraScopeView(Context context, Camera camera) 
+    {
         super(context);
         mCamera = camera;
         this.isInEditMode();
@@ -26,7 +28,8 @@ public class CameraScopeView extends SurfaceView implements SurfaceHolder.Callba
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
-    public void surfaceCreated(SurfaceHolder holder) {
+    public void surfaceCreated(SurfaceHolder holder) 
+    {
         // The Surface has been created, now tell the camera where to draw the preview.
         try 
         {
@@ -41,17 +44,20 @@ public class CameraScopeView extends SurfaceView implements SurfaceHolder.Callba
         // empty. Take care of releasing the Camera preview in your activity.
     }
 
-    public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+    public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) 
+    {
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.
 
-        if (mHolder.getSurface() == null){
+        if (mHolder.getSurface() == null)
+        {
           // preview surface does not exist
           return;
         }
 
         // stop preview before making changes
-        try {
+        try 
+        {
             mCamera.stopPreview();
         } catch (Exception e){
           // ignore: tried to stop a non-existent preview
@@ -61,7 +67,8 @@ public class CameraScopeView extends SurfaceView implements SurfaceHolder.Callba
         // reformatting changes here
 
         // start preview with new settings
-        try {
+        try 
+        {
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
 

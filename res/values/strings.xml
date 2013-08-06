@@ -26,6 +26,6 @@
     <string name="ScopeActivity_ammo_selection_button_text">ROUND</string>
     <string name="ScopeActivity_windage_set_text">Set</string>
     <string name="ScopeActivity_center_button_text">Center</string>
-    <string name="AboutActivity_thank_you_message_text">This program is created by Corlan M. in 2013. \n\n I\'d like to personally thank Anton G. for being my target dummy ( :P ), which helped me calibrate the screen location of the targeting box at the different angles.</string>
+    <string name="AboutActivity_thank_you_message_text">This program is written by Corlan M. \n\n I\'d like to personally thank Anton G. for being my target dummy ( :P ), which helped me calibrate the screen location of the targeting box at the different angles.</string>
 
 </resources>

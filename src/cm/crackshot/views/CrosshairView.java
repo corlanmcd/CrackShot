@@ -90,8 +90,6 @@ public class CrosshairView extends View
 	{
 		drawScopeCircle(canvas);
 		drawReticle(canvas);
-		//drawVerticalLine(canvas);
-		//drawHorizontalLines(canvas);
 		drawTargetingBox(canvas);
 	}
 	
@@ -199,13 +197,10 @@ public class CrosshairView extends View
 		{
 			scaledTargetingBoxImage = targetingBoxImage;
 		}
-		
-		//getPixelDistanceBasedonTargetingPoint()
-		
-		
+				
 		canvas.drawBitmap(scaledTargetingBoxImage,
 						  (float) (targetingPoint.x - (scaledTargetingBoxImage.getWidth()/2) + scopeOffset),
-						  (float) (getHeight()/2 + getPixelDistanceBasedonTargetingPoint()),
+						  (float) (getPixelDistanceBasedonTargetingPoint()),
 						  paint);
 		
 		paint.setColor(scopeColor);
@@ -213,7 +208,7 @@ public class CrosshairView extends View
 		if(scopeOffset < 0) // Left
 		{
 			canvas.drawLine((float) (getWidth()/2 + scopeOffset),
-							(float) (getHeight()/2 + getPixelDistanceBasedonTargetingPoint()) + scaledTargetingBoxImage.getHeight(),
+							(float) (getPixelDistanceBasedonTargetingPoint() + scaledTargetingBoxImage.getHeight()),
 							(float) (getWidth()/2 + scopeOffset), 
 							getHeight()/2 + scopeRadius + (scopeOffset * 0.26f), 
 							paint);
@@ -221,7 +216,7 @@ public class CrosshairView extends View
 		else // Right
 		{
 			canvas.drawLine((float) (getWidth()/2 + scopeOffset),
-					(float) (getHeight()/2 + getPixelDistanceBasedonTargetingPoint()) + scaledTargetingBoxImage.getHeight(),
+					(float) (getPixelDistanceBasedonTargetingPoint() + scaledTargetingBoxImage.getHeight()),
 					(float) (getWidth()/2 + scopeOffset), 
 					getHeight()/2 + scopeRadius - (scopeOffset * 0.26f), 
 					paint);
@@ -237,22 +232,22 @@ public class CrosshairView extends View
 			switch(selectedRange)
 			{
 				case 1:
-					numPixels = 85;
+					numPixels = (int)(getHeight() * 0.5749559f);//85;
 					break;
 				case 2:
-					numPixels = 120;
+					numPixels = (int)(getHeight() * 0.60582f);//120;
 					break;
 				case 3:
-					numPixels = 160;
+					numPixels = (int)(getHeight() * 0.641f);//160;
 					break;
 				case 4:
-					numPixels = 213;
+					numPixels = (int)(getHeight() * 0.68783f);//213;
 					break;
 				case 5:
-					numPixels = 277;
+					numPixels = (int)(getHeight() * 0.744268f);//277;
 					break;
 				default:
-					numPixels = 90;
+					numPixels = (int)(getHeight() * 0.5749559f);//85;
 					break;
 			}
 		}
@@ -261,16 +256,16 @@ public class CrosshairView extends View
 			switch(selectedRange)
 			{
 				case 1:
-					numPixels = 95;
+					numPixels = (int)(getHeight() * 0.58377425f);//95;
 					break;
 				case 2:
-					numPixels = 155;
+					numPixels = (int)(getHeight() * 0.6366843f);//155;
 					break;
 				case 3:
-					numPixels = 345;
+					numPixels = (int)(getHeight() * 0.8042328f);//345;
 					break;
 				default:
-					numPixels = 100;
+					numPixels = (int)(getHeight() * 0.58377425f);//95;
 					break;
 			}
 		}/*
